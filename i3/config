@@ -1,0 +1,169 @@
+set $mod Mod4
+font pango:monospace 8
+
+exec_always feh --bg-fill /home/genfinternet/Wallpaper/mickey.png
+exec_always setxkbmap fr
+exec_always xset -b
+exec_always xset r rate 250 30
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# kill focused window
+bindsym $mod+Shift+a kill
+
+# start dmenu (a program launcher)
+bindsym $mod+d exec dmenu_run
+# There also is the (new) i3-dmenu-desktop which only displays applications
+# shipping a .desktop file. It is a wrapper around dmenu, so you need that
+# installed.
+# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# split in horizontal orientation
+bindsym $mod+h split h
+
+# split in vertical orientation
+bindsym $mod+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+z layout tabbed
+bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+q focus parent
+
+# focus the child container
+#bindsym $mod+d focus child
+
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+i exec "i3-nagbar -t warning -m 'This will execute your logout script, do you really want to' -b 'Yes, proceed' 'sh /nfs/home/epita_2018/piriou_a/.my_bin/exit.sh'"
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym j resize shrink width 10 px or 10 ppt
+        bindsym k resize grow height 10 px or 10 ppt
+        bindsym l resize shrink height 10 px or 10 ppt
+        bindsym m resize grow width 10 px or 10 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+    status_command i3status
+}
+
+
+#############################################################################
+#############################                    ############################
+#############################       CUSTOM       ############################
+#############################                    ############################
+#############################################################################
+
+bindsym $mod+Return exec xterm -bg grey7 -fg white
+bindsym $mod+Shift+Return exec xterm -bg grey7 -fg white
+bindsym $mod+BackSpace exec xterm -e 'sh /nfs/home/epita_2018/piriou_a/Config/bin/scripts/dead_lock.sh'
+#bindsym $mod+Return exec /nfs/home/epita_2018/piriou_a/.my_bin/epi3lock -i ~/Wallpaper/lock2.png -N lol_nope; 
+bindsym $mod+c exec google-chrome-stable
+ 
+#Workspace 1
+set $name1 "1. VIM"
+bindsym $mod+ampersand workspace $name1
+bindsym $mod+Shift+ampersand move container to workspace $name1
+
+#Workspace 2
+set $name2 "2. GIT"
+bindsym $mod+eacute workspace $name2
+bindsym $mod+Shift+eacute move container to workspace $name2
+
+#Workspace 3
+set $name3 "3. LOCK"
+bindsym $mod+quotedbl workspace $name3
+bindsym $mod+Shift+quotedbl move container to workspace $name3
+
+#Workspace 4
+set $name4 "4. GCC"
+bindsym $mod+apostrophe workspace $name4
+bindsym $mod+Shift+apostrophe move container to workspace $name4
+
+#Workspace 5
+set $name5 "5. BROWSER"
+bindsym $mod+parenleft workspace $name5
+bindsym $mod+Shift+5 move container to workspace $name5
+
+#Workspace 6
+set $name6 "6. TEST"
+bindsym $mod+minus workspace $name6
+bindsym $mod+Shift+minus move container to workspace $name6
+
+#Workspace 7
+set $name7 "7. OTHER"
+bindsym $mod+egrave workspace $name7
+bindsym $mod+Shift+egrave move container to workspace $name7
+
+#Workspace 8
+set $name8 "8. OTHER"
+bindsym $mod+underscore workspace $name8
+bindsym $mod+Shift+underscore move container to workspace $name8
+
+#Workspace 9
+set $name9 "9. OTHER"
+bindsym $mod+ccedilla workspace $name9
+bindsym $mod+Shift+ccedilla move container to workspace $name9
+
+#Workspace 10
+set $name10 "10. SLRN"
+bindsym $mod+agrave workspace $name10
+bindsym $mod+Shift+agrave move container to workspace $name10
+
+# Things to exec at startup
+exec_always feh --image-bg black --bg-fill '/nfs/home/epita_2018/piriou_a/Wallpaper/mickey.png'
+exec_always xset r rate 250 40
+exec jogsoul
+
+#Test Area 
+#exec_always --no-startup-id i3-msg 'workspace $name8; layout tabbed; exec xterm; exec xterm;exec firefox;workspace $name7; layout tabbed; exec xterm; exec xterm;exec firefox;'
