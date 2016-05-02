@@ -1,0 +1,24 @@
+SRC = #Source file
+TARGET = #Target
+TESTSUIT = #test suite
+CXX = clang++
+OBJ = $(SRC:.c=.o)
+CXXFLAGS = -Werror -Wall -Wextra -pedantic -std=c++14
+
+.PHONY: all
+all:$(TARGET)
+	
+$(TARGET):$(OBJ)
+	$(CXX) $(CXXFLAGS) $(OBJ) -o $(TARGET)
+
+.PHONY: clean
+clean:
+	$(RM) $(OBJ) $(TARGET)
+
+.PHONY: debug
+debug: CFLAGS += -g
+debug: clean all
+
+.PHONY: check
+check:all
+	$(TESTSUIT)
