@@ -1,0 +1,38 @@
+set nocompatible
+
+"Yes i'm weak
+set mouse=a
+"Please don 't hit me I swear I don't use it that much
+
+set autoread
+
+syntax on
+
+set number
+set relativenumber
+
+set tw=80
+
+colorscheme molokai
+
+filetype plugin indent on
+set expandtab
+set tabstop=8
+set softtabstop=4
+set shiftwidth=4
+set smarttab
+set backspace=indent,eol,start
+
+" Removes spaces at end of lines when writing
+autocmd BufWritePre *.c,*.h,*.cpp,*.cxx,*.cc,*.hh,*.hxx :%s/\s\+$//ge
+
+" Closes Brackets, braces, strings... automatically
+autocmd FileType php,c,java,cpp,js inoremap /* /*  */<Esc>hhha
+autocmd FileType c,cpp,sh inoremap ( ()<Esc>i
+autocmd FileType c,cpp,sh inoremap { {<CR>}<Esc>ko
+autocmd FileType c,cpp inoremap [ []<Esc>i
+
+set pastetoggle=<F10>
+
+set splitbelow
+set splitright
