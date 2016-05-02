@@ -10,5 +10,8 @@
 *.o
 *.iml
 *.jar
+*.aux
+*.pdf
+*.out
 .idea/*
 rsrc/*

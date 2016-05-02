@@ -8,8 +8,10 @@
 *.log
 *.core
 *.o
-.gitsource.sh
-rsrc/*
 *.iml
 *.jar
+*.aux
+*.pdf
+*.out
 .idea/*
+rsrc/*

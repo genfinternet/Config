@@ -27,7 +27,7 @@
 source ~/.export.sh
 
 export NNTPSERVER=news.epita.fr
-#export CC="perl ~/Config/bin/colorgcc.perl"
+#export CC="perl ~/Config/rsrc/bin/colorgcc.perl"
 
 
 if [ $LOCATION = "laptop" ]; then
@@ -174,7 +174,7 @@ alias turtle="echo -e \"Do \e[4;1;31mNOT\e[0m touch the \e[1;5;4;31mTurtle\""
 CAPSON()
 {
     if [ `COLS` -gt 150 ]; then
-        cat ~/Config/other/ascii/CAPSONCAPSOFF
+        cat ~/Config/rsrc/other/ascii/CAPSONCAPSOFF
     else
         echo CAPS LOCK CONNARD !
     fi
@@ -230,9 +230,9 @@ alias ftpile="untpile;tpile"
 alias wifi-menu="sudo wifi-menu"
 
 alias sql='~/Config/bin/scripts/postgres.sh'
-alias valgrind='~/Config/bin/scripts/valgrind-color.sh'
+alias valgrind='~/Config/rsrc/bin/scripts/valgrind-color.sh'
 alias const='~/Config/bin/tools/getconstructor.sh'
-alias tpile=". ~/Config/bin/scripts/compile_tiger.sh"
+alias tpile=". ~/Config/rsrc/bin/scripts/compile_tiger.sh"
 
 alias ratp='~/Config/bin/scripts/ratp.sh'
 alias rmswp='rm `find . | grep -E "^\..*\.sw[pon]$"`'
@@ -282,7 +282,7 @@ function resetadb()
     adb devices
 }
 
-alias password="~/Config/confloose/anti/password.sh"
+alias password="~/Config/bin/tools/password.sh"
 #Search a motif into all file in subdirectory
 alias grepc="~/Config/bin/tools/grepc.sh"
 alias fixme='grepc "(//\s*FIXME)|(--\s*FIXME)|(/\*\s*FIXME\s*\*/)|(#\s*FIXME)"'
@@ -400,27 +400,13 @@ cs()
 
 alias todo="~/Config/bin/scripts/todo.sh"
 
-# File.c & File.h :
-new_dot_c()
-{
-    sh ~/Config/bin/tools/newc.sh $@
-}
-
-new_dot_h()
-{
-    sh ~/Config/bin/tools/newh.sh $@
-}
-
 # Makefile :
 alias nmk='cp ~/Config/template/makefiles/Makefile Makefile'
-
-# Fichier Script:
-alias nsh='sh ~/Config/bin/tools/new.sh '
 
 # Other File:
 alias nTODO='cp ~/Config/template/other/TODO .'
 alias nREADME='cp ~/Config/template/other/README .'
-alias mkauth='> AUTHORS echo "* piriou_a";chmod 640 AUTHORS'
+alias nAUTHORS='AUTHORS'
 alias AUTHORS='> AUTHORS echo "* piriou_a";chmod 640 AUTHORS'
 alias ngitignore='cp ~/Config/template/other/gitignore ./.gitignore'
 
@@ -447,7 +433,7 @@ alias lg1='log --graph --abbrev-commit --decorate --date=relative --format=forma
 if [ "$LOCATION" != "pxe" ]; then
     alias blame='git-fame'
 else
-    alias blame='~/Config/bin/scripts/gitblame.sh'
+    alias blame='~/Config/rsrc/bin/scripts/gitblame.sh'
 fi
 
 howmanycommitbitch()
@@ -543,7 +529,7 @@ gitsaveall()
 
 # Stupid Things :
 alias slowswapper='xmodmap ~/Config/x/slowswapper'
-alias tsu='cat ~/Config/other/ascii/Tsu'
+alias tsu='cat ~/Config/rsrc/other/ascii/Tsu'
 
 
 # YOU CAN'T KILL THE HUNGRY RABBIT
@@ -559,4 +545,4 @@ alias clearchallenge="rm $'\033'\[0"
 ##############################
 
 #xset r rate 250 50
-source ~/Config/confloose/anti/fuckyou.sh
+source ~/Config/bin/tools/fuckyou.sh
