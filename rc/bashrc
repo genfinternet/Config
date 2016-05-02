@@ -1,0 +1,37 @@
+##############################
+#                            #
+#          XINITRC           #
+#                            #
+##############################
+
+function start()
+{
+    if [ $# -eq 0 ]; then
+        startx
+    else
+        echo "numlockx &" >.xinitrc
+        echo -n "exec " >>.xinitrc 
+        if [ "$1" = "i3" ]; then
+            echo "i3" >>~/.xinitrc
+        elif [ "$1" = "awesome" ]; then
+            echo "awesome" >>~/.xinitrc
+        elif [ "$1" = "enlightenment" ]; then
+            echo "enlightenment_start" >>~/.xinitrc
+        elif [ "$1" = "cinnamon" ]; then
+            echo "cinnamon-session" >>~/.xinitrc
+        else
+            echo -e "\e[31;1mNot a valid session manager on this computer\e[0m"
+            echo "i3" >>~/.xinitrc
+        fi
+        startx
+    fi
+}
+
+SHELL="bash"
+export LOCATION="laptop"
+source ~/.shellrc.sh
+source ~/.pxe.sh
+
+if [ "$(tty)" = "/dev/tty1" ] && [ -z "$DISPLAY" ]; then
+    startx
+fi
