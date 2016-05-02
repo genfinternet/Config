@@ -30,7 +30,6 @@ function start()
 SHELL="bash"
 export LOCATION="laptop"
 source ~/.shellrc.sh
-source ~/.pxe.sh
 
 if [ "$(tty)" = "/dev/tty1" ] && [ -z "$DISPLAY" ]; then
     startx
