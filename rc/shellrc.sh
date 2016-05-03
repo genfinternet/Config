@@ -31,50 +31,50 @@ export NNTPSERVER=news.epita.fr
 
 
 if [ $LOCATION = "laptop" ]; then
-    eval $(thefuck --alias)
-    export MAKE_OPTION=""
+  eval $(thefuck --alias)
+  export MAKE_OPTION=""
 elif [ $LOCATION = "pxe" ]; then
-    export MAKE_OPTION="-j8"
+  export MAKE_OPTION="-j8"
 elif [ $LOCATION = "home" ]; then
-    eval $(thefuck --alias)
-    export MAKE_OPTION="-j8"
+  eval $(thefuck --alias)
+  export MAKE_OPTION="-j8"
 else
-    echo -e "\e[33mUnknown location\e[0m"
+  echo -e "\e[33mUnknown location\e[0m"
 fi
 
 if [ $SHELL = "bash" ]; then
-    export PROMPT_COMMAND=prompt
-    function prompt()
-    {
-        EXIT=$?
-        green=$(tput setaf 2)
-        blue=$(tput setaf 4)
-        yellow=$(tput setaf 3)
-        red=$(tput setaf 1)
-        bold=$(tput bold)
-        reset=$(tput sgr0)
-        PS1="\[\$reset\]\[\$bold\]"
-        if [ $EXIT -eq 0 ]; then
-            PS1+=""
-        elif [ $EXIT -gt 127 ] && [ $EXIT -lt 160 ]; then
-            PS1+="\[\$yellow\]"
-            PS1+="$EXIT "
-        else
-            PS1+="\[\$red\]"
-            PS1+="$EXIT "
-        fi
-        PS1+="\[\$green\]Genf : \[\$blue\]\W/ \[\$green\]>> \[\$reset\]"
-    }
-    export PS2="\e[32;1m>> \e[0m"
-    alias srcsh='source ~/.bashrc'
+  export PROMPT_COMMAND=prompt
+  function prompt()
+  {
+    EXIT=$?
+    green=$(tput setaf 2)
+    blue=$(tput setaf 4)
+    yellow=$(tput setaf 3)
+    red=$(tput setaf 1)
+    bold=$(tput bold)
+    reset=$(tput sgr0)
+    PS1="\[\$reset\]\[\$bold\]"
+    if [ $EXIT -eq 0 ]; then
+      PS1+=""
+    elif [ $EXIT -gt 127 ] && [ $EXIT -lt 160 ]; then
+      PS1+="\[\$yellow\]"
+      PS1+="$EXIT "
+    else
+      PS1+="\[\$red\]"
+      PS1+="$EXIT "
+    fi
+    PS1+="\[\$green\]Genf : \[\$blue\]\W/ \[\$green\]>> \[\$reset\]"
+  }
+  export PS2="\e[32;1m>> \e[0m"
+  alias srcsh='source ~/.bashrc'
 else
-    setopt PROMPT_SUBST
-    HISTFILE=~/.histfile
-    HISTSIZE=5000
-    SAVEHIST=5000
-    export PS1="%B%F{green}Genf : %F{blue}PATH %F{green}>> %b%f"
-    export PS2="\e[32;1m>> \e[0m"
-    alias srcsh='source ~/.zshrc'
+  setopt PROMPT_SUBST
+  HISTFILE=~/.histfile
+  HISTSIZE=5000
+  SAVEHIST=5000
+  export PS1="%B%F{green}Genf : %F{blue}PATH %F{green}>> %b%f"
+  export PS2="\e[32;1m>> \e[0m"
+  alias srcsh='source ~/.zshrc'
 fi
 
 ##############################
@@ -88,80 +88,80 @@ alias cltrash='rm ~/Trash/* -rf'
 
 cdp()
 {
-    cd ~/Project 2>/dev/null
-    if [ $# -eq 0 ]; then
-        cd $CURRENT_PROJECT 2>/dev/null
-        if [ $? -gt 0 ]; then
-            echo -e "\e[31mDefault project \e[33m\`$CURRENT_PROJECT'\e[31m does not exist, plese create it first\e[0m"
-            return 1
-        fi
-    else 
-        cd $1* 2>/dev/null
-        if [ $? -gt 0 ]; then
-            echo -e "\e[33mFirst Argument does not match an existing project, using project \e[32m\`$CURRENT_PROJECT'\e[33m instead\e[0m"
-            cd $CURRENT_PROJECT 2>/dev/null
-            if [ $? -gt 0 ]; then
-                echo -e "\e[31mDefault project \e[33m\`$CURRENT_PROJECT'\e[31m does not exist, plese create it first\e[0m"
-                return 1
-            fi
-            cd $1* 2>/dev/null
-        fi
+  cd ~/Project 2>/dev/null
+  if [ $# -eq 0 ]; then
+    cd $CURRENT_PROJECT 2>/dev/null
+    if [ $? -gt 0 ]; then
+      echo -e "\e[31mDefault project \e[33m\`$CURRENT_PROJECT'\e[31m does not exist, plese create it first\e[0m"
+      return 1
     fi
+  else 
+    cd $1* 2>/dev/null
+    if [ $? -gt 0 ]; then
+      echo -e "\e[33mFirst Argument does not match an existing project, using project \e[32m\`$CURRENT_PROJECT'\e[33m instead\e[0m"
+      cd $CURRENT_PROJECT 2>/dev/null
+      if [ $? -gt 0 ]; then
+        echo -e "\e[31mDefault project \e[33m\`$CURRENT_PROJECT'\e[31m does not exist, plese create it first\e[0m"
+        return 1
+      fi
+      cd $1* 2>/dev/null
+    fi
+  fi
 
-    shift
-    if [ $# -gt 0 ]; then
-        for i in $@; do
-            cd $i* 2>/dev/null
-        done
-    fi
+  shift
+  if [ $# -gt 0 ]; then
+    for i in $@; do
+      cd $i* 2>/dev/null
+    done
+  fi
 }
 
 function cdd()
 {
-    cd ~/Perso
-    for i in $@; do
-        cd $i*
-    done
+  cd ~/Perso
+  for i in $@; do
+    cd $i*
+  done
 }
 
 function cdc()
 {
-    cd ~/Config
-    for i in $@; do
-        cd $i*
-    done
+  cd ~/Config
+  for i in $@; do
+    cd $i*
+  done
 }
 
 function up( )
 {
-    if [ $# -eq 0 ]; then
-        LIMIT=1
-    else
-        LIMIT=$1
-    fi
-    P=$PWD
-    for ((i=1; i <= LIMIT; i++))
-    do
-        P=$P/..
-    done
-    cd $P
-    export MPWD=$P
+  if [ $# -eq 0 ]; then
+    LIMIT=1
+  else
+    LIMIT=$1
+  fi
+  P=$PWD
+  for ((i=1; i <= LIMIT; i++))
+  do
+    P=$P/..
+  done
+  cd $P
+  export MPWD=$P
 }
 
 function back()
 {
-    if [ $# -eq 0 ]; then
-        LIMIT=1
-    else
-        LIMIT=$1
-    fi
-    P=$MPWD
-    for ((i=1; i <= LIMIT; i++))
-    do
-        P=${P%/..}
-    done
-    cd $P
-    export MPWD=$P
+  if [ $# -eq 0 ]; then
+    LIMIT=1
+  else
+    LIMIT=$1
+  fi
+  P=$MPWD
+  for ((i=1; i <= LIMIT; i++))
+  do
+    P=${P%/..}
+  done
+  cd $P
+  export MPWD=$P
 }
 
 ##############################
@@ -173,11 +173,11 @@ function back()
 alias turtle="echo -e \"Do \e[4;1;31mNOT\e[0m touch the \e[1;5;4;31mTurtle\""
 CAPSON()
 {
-    if [ `COLS` -gt 150 ]; then
-        cat ~/Config/rsrc/other/ascii/CAPSONCAPSOFF
-    else
-        echo CAPS LOCK CONNARD !
-    fi
+  if [ `COLS` -gt 150 ]; then
+    cat ~/Config/rsrc/other/ascii/CAPSONCAPSOFF
+  else
+    echo CAPS LOCK CONNARD !
+  fi
 }
 alias caps='echo -e -n "\e[1;5;31m" ;CAPSON ;echo -e -n "\n\e[0m\n"'
 
@@ -250,22 +250,22 @@ alias vlg='valgrind --leak-check=full --show-reachable=yes'
 alias vlfull='valgrind --leak-check=full -v --show-reachable=yes'
 
 man() {
-    # Respectively
-    #   Never saw it used in man page
-    #   Title, options.
-    #   Text in option
-    #   Don't touch probably important that it is 0
-    #   Test Bottom page
-    #   ]
-    #   EXPRESSION
-    env LESS_TERMCAP_mb=$'\E[5;01;31m' \
-        LESS_TERMCAP_md=$'\E[01;38;5;202m' \
-        LESS_TERMCAP_me=$'\E[0m' \
-        LESS_TERMCAP_se=$'\E[0m' \
-        LESS_TERMCAP_so=$'\E[38;5;246m' \
-        LESS_TERMCAP_ue=$'\E[0m' \
-        LESS_TERMCAP_us=$'\E[04;38;5;45m' \
-        man "$@"
+  # Respectively
+  #   Never saw it used in man page
+  #   Title, options.
+  #   Text in option
+  #   Don't touch probably important that it is 0
+  #   Test Bottom page
+  #   ]
+  #   EXPRESSION
+  env LESS_TERMCAP_mb=$'\E[5;01;31m' \
+    LESS_TERMCAP_md=$'\E[01;38;5;202m' \
+    LESS_TERMCAP_me=$'\E[0m' \
+    LESS_TERMCAP_se=$'\E[0m' \
+    LESS_TERMCAP_so=$'\E[38;5;246m' \
+    LESS_TERMCAP_ue=$'\E[0m' \
+    LESS_TERMCAP_us=$'\E[04;38;5;45m' \
+    man "$@"
 }
 
 
@@ -277,9 +277,9 @@ man() {
 
 function resetadb()
 {
-    adb kill-server
-    sudo adb start-server
-    adb devices
+  adb kill-server
+  sudo adb start-server
+  adb devices
 }
 
 alias password="~/Config/bin/tools/password.sh"
@@ -300,22 +300,22 @@ alias autocommit="fun_commitall $SUPPORTED_EXTENTIONS"
 
 function fun_commitall()
 {
-    if [ -f "./build.xml" ]; then
-        git add build.xml
-        git commit -m "Add build.xml"
-    fi
-    if [ -f "./Makefile" ]; then
-        git add Makefile
-        git commit -m "Add Makefile"
-    fi
-    for i in $@; do
-        for i in `find src tests | grep -E "\.$i\$"`; do
-            if [ -f $i ]; then
-                git add $i
-                git commit -m"Add `basename $i | sed -E "s/(.*)\.(.*)/\2 file : \1/g"`"
-            fi
-        done
+  if [ -f "./build.xml" ]; then
+    git add build.xml
+    git commit -m "Add build.xml"
+  fi
+  if [ -f "./Makefile" ]; then
+    git add Makefile
+    git commit -m "Add Makefile"
+  fi
+  for i in $@; do
+    for i in `find src tests | grep -E "\.$i\$"`; do
+      if [ -f $i ]; then
+        git add $i
+        git commit -m"Add `basename $i | sed -E "s/(.*)\.(.*)/\2 file : \1/g"`"
+      fi
     done
+  done
 }
 
 alias change=". ~/Config/bin/tools/change.sh"
@@ -327,20 +327,20 @@ alias debug="change debug"
 
 function sedit()
 {
-    if [ $# -eq 1 ]; then
-        alias $1 | grep -E "alias .*=('|\").*\.sh('|\")" >/dev/null 2>/dev/null
-        if [ $? -eq 0 ]; then
-            file=`alias $1 | grep -o -E "(\"|').*(\"|')"`
-            file=`echo $file | sed "s/\('\|\"\)//g" | sed "s/^\. //g" | sed "s@~@$HOME@g"`
-            if [ "$FLAG_DEBUG" != on ]; then
-                vim $file
-            fi
-        else
-            echo -e "\e[33;1m\`$1' is probably not an alias for a script\e[0m"
-        fi
+  if [ $# -eq 1 ]; then
+    alias $1 | grep -E "alias .*=('|\").*\.sh('|\")" >/dev/null 2>/dev/null
+    if [ $? -eq 0 ]; then
+      file=`alias $1 | grep -o -E "(\"|').*(\"|')"`
+      file=`echo $file | sed "s/\('\|\"\)//g" | sed "s/^\. //g" | sed "s@~@$HOME@g"`
+      if [ "$FLAG_DEBUG" != on ]; then
+        vim $file
+      fi
     else
-        echo >&2 -e "\e[33;1mUsage: sedit alias_name\e[0m"
+      echo -e "\e[33;1m\`$1' is probably not an alias for a script\e[0m"
     fi
+  else
+    echo >&2 -e "\e[33;1mUsage: sedit alias_name\e[0m"
+  fi
 }
 
 
@@ -349,47 +349,47 @@ alias cleanall='cd ~/Project; for i in `ls`; do echo -e "\e[34;1mCleaning Projec
 
 
 extract () {
-    if [ -f $1 ] ; then
-        case $1 in
-            *.tar.bz2)   tar xvjf $1    ;;
-            *.tar.gz)    tar xvzf $1    ;;
-            *.tar.xz)    tar xf $1      ;;
-            *.bz2)       bunzip2 $1     ;;
-            *.rar)       unrar x $1     ;;
-            *.gz)        gunzip $1      ;;
-            *.tar)       tar xvf $1     ;;
-            *.tbz2)      tar xvjf $1    ;;
-            *.tgz)       tar xvzf $1    ;;
-            *.zip)       unzip $1       ;;
-            *.Z)         uncompress $1  ;;
-            *.7z)        7z x $1        ;;
-            *)           echo "don't know how to extract '$1'..." ;;
-        esac
-    else
-        echo "'$1' is not a valid file!"
-    fi
+  if [ -f $1 ] ; then
+    case $1 in
+      *.tar.bz2)   tar xvjf $1    ;;
+      *.tar.gz)    tar xvzf $1    ;;
+      *.tar.xz)    tar xf $1      ;;
+      *.bz2)       bunzip2 $1     ;;
+      *.rar)       unrar x $1     ;;
+      *.gz)        gunzip $1      ;;
+      *.tar)       tar xvf $1     ;;
+      *.tbz2)      tar xvjf $1    ;;
+      *.tgz)       tar xvzf $1    ;;
+      *.zip)       unzip $1       ;;
+      *.Z)         uncompress $1  ;;
+      *.7z)        7z x $1        ;;
+      *)           echo "don't know how to extract '$1'..." ;;
+    esac
+  else
+    echo "'$1' is not a valid file!"
+  fi
 }
 
 log_output()
 {
-    if [ $# -gt 0 ]; then
-        $@ 1>stdout_$1 2>stderr_$1
-    else
-        rm stderr_* stdout_* -i
-    fi
+  if [ $# -gt 0 ]; then
+    $@ 1>stdout_$1 2>stderr_$1
+  else
+    rm stderr_* stdout_* -i
+  fi
 }
 
 
 mkcd()
 {
-    mkdir $@
-    cd $@
+  mkdir $@
+  cd $@
 }
 
 cs()
 {
-    cd "$@";
-    ls --color=auto;
+  cd "$@";
+  ls --color=auto;
 }
 
 ##############################
@@ -431,19 +431,19 @@ alias vim="~/Config/bin/tools/vim.sh"
 alias lg1='log --graph --abbrev-commit --decorate --date=relative --format=format:"%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)" --all'
 
 if [ "$LOCATION" != "pxe" ]; then
-    alias blame='git-fame'
+  alias blame='git-fame'
 else
-    alias blame='~/Config/rsrc/bin/scripts/gitblame.sh'
+  alias blame='~/Config/rsrc/bin/scripts/gitblame.sh'
 fi
 
 howmanycommitbitch()
 {
-    a=$((`git shortlog | wc -l` - 2))
-    if [ $a -gt 1 ]; then
-        echo "You made $a commits bitch!"
-    else
-        echo "You made $a commit bitch!"
-    fi
+  a=$((`git shortlog | wc -l` - 2))
+  if [ $a -gt 1 ]; then
+    echo "You made $a commits bitch!"
+  else
+    echo "You made $a commit bitch!"
+  fi
 }
 
 alias checkout='git checkout'
@@ -462,30 +462,30 @@ alias pushtags='~/Config/bin/tools/pushtags.sh'
 alias gitpull='gpull'
 gpull()
 {
-    if [ $# -eq 2 ]; then
-        if [ $1 = "origin" ]; then
-            git checkout $2
-            git pull $@
-        else
-            echo -e -n "\e[33m"
-            echo -n "I do not know how to switch in a branch not in origin yet,"
-            echo -n " can't switch to $1/$2 use \`git checkout' and \`git pull' instead"
-            echo -e "\e[0m"
-        fi
+  if [ $# -eq 2 ]; then
+    if [ $1 = "origin" ]; then
+      git checkout $2
+      git pull $@
     else
-        git checkout master
-        git pull origin master
+      echo -e -n "\e[33m"
+      echo -n "I do not know how to switch in a branch not in origin yet,"
+      echo -n " can't switch to $1/$2 use \`git checkout' and \`git pull' instead"
+      echo -e "\e[0m"
     fi
+  else
+    git checkout master
+    git pull origin master
+  fi
 }
 
 alias gitpush='gpush'
 gpush()
 {
-    if [ "$#" = "0" ]; then
-        git push origin master;
-    else
-        git push $@;
-    fi
+  if [ "$#" = "0" ]; then
+    git push origin master;
+  else
+    git push $@;
+  fi
 }
 
 alias mkrepo="~/Config/bin/scripts/mkrepo.sh"
@@ -498,33 +498,111 @@ alias mkrepo="~/Config/bin/scripts/mkrepo.sh"
 ##############################
 
 # Config Save :
-alias savebash='cp ~/.shellrc.sh ~/Config/rc/shellrc.sh'
-alias getbash='cp ~/Config/rc/shellrc.sh ~/.shellrc.sh; srcsh'
-alias savevimrc='cp ~/.vimrc ~/Config/rc/vimrc'
-alias savei3Config='cp ~/.i3/config ~/Config/i3/config'
+getconfig()
+{
+  if [ $# -eq 0 ]; then
+    cp ~/Config/i3/config ~/.i3/config
+    cp ~/Config/i3/i3status.conf ~/.i3status.conf
+    cp ~/Config/rc/shellrc.sh ~/.shellrc.sh
+    cp ~/Config/rc/bashrc ~/.bashrc
+    cp ~/Config/vim/vimrc ~/.vimrc
+    cp ~/Config/X/Xdefaults ~/.Xdefaults
+  else
+    while [ $# -ne 0 ]; do
+      case $1 in
+        i3)
+          cp ~/Config/i3/config ~/.i3/config
+          cp ~/Config/i3/i3status.conf ~/.i3status.conf
+          ;;
+        bash)
+          cp ~/Config/rc/shellrc.sh ~/.shellrc.sh
+          cp ~/Config/rc/bashrc ~/.bashrc
+          ;;
+        vim)
+          cp ~/Config/vim/vimrc ~/.vimrc
+          ;;
+        X)
+          cp ~/Config/X/Xdefaults ~/.Xdefaults
+          ;;
+        all)
+          cp ~/Config/i3/config ~/.i3/config
+          cp ~/Config/i3/i3status.conf ~/.i3status.conf
+          cp ~/Config/rc/shellrc.sh ~/.shellrc.sh
+          cp ~/Config/rc/bashrc ~/.bashrc
+          cp ~/Config/vim/vimrc ~/.vimrc
+          cp ~/Config/X/Xdefaults ~/.Xdefaults
+          ;;
+      esac
+      shift
+    done
+  fi
+}
+
+configsave()
+{
+  if [ $# -eq 0 ]; then
+    cp ~/.i3/config ~/Config/i3/config
+    cp ~/.i3status.conf ~/Config/i3/i3status.conf
+    cp ~/.shellrc.sh ~/Config/rc/shellrc.sh
+    cp ~/.bashrc ~/Config/rc/bashrc
+    cp ~/.vimrc ~/Config/vim/vimrc
+    cp ~/.Xdefaults ~/Config/X/Xdefaults
+  else
+    while [ $# -ne 0 ]; do
+      case $1 in
+        i3)
+          cp ~/.i3/config ~/Config/i3/config
+          cp ~/.i3status.conf ~/Config/i3/i3status.conf
+          ;;
+        bash)
+          cp ~/.shellrc.sh ~/Config/rc/shellrc.sh
+          cp ~/.bashrc ~/Config/rc/bashrc
+          ;;
+        vim)
+          cp ~/.vimrc ~/Config/vim/vimrc
+          ;;
+        X)
+          cp ~/.Xdefaults ~/Config/X/Xdefaults
+          ;;
+        all)
+          echo "all"
+          cp ~/.i3/config ~/Config/i3/config
+          cp ~/.i3status.conf ~/Config/i3/i3status.conf
+          cp ~/.shellrc.sh ~/Config/rc/shellrc.sh
+          cp ~/.bashrc ~/Config/rc/bashrc
+          cp ~/.vimrc ~/Config/vim/vimrc
+          cp ~/.Xdefaults ~/Config/X/Xdefaults
+          ;;
+      esac
+      shift
+    done
+  fi
+}
+
+alias getbash='getconfig bash; srcsh'
 
 alias whatsnew='~/Config/bin/scripts/modifbash.sh notclean'
 alias cleanwhatsnew='~/Config/bin/scripts/modifbash.sh clean'
 
 gitsave()
 {
-    cd ~/Config
-    add --all
-    if [ $# -eq 0 ]; then
-        git commit -m "Auto save message"
-    else
-        git commit -m "$@"
-    fi
-    git push origin master
+  cd ~/Config
+  add --all
+  if [ $# -eq 0 ]; then
+    git commit -m "Auto save message"
+  else
+    git commit -m "$@"
+  fi
+  git push origin master
 }
 
 gitsaveall()
 {
-    cp ~/.shellrc.sh ~/Config/rc/shellrc.sh
-    cp ~/.vimrc ~/Config/rc/vimrc
-    cp ~/.i3/config ~/Config/i3/config
+  cp ~/.shellrc.sh ~/Config/rc/shellrc.sh
+  cp ~/.vimrc ~/Config/rc/vimrc
+  cp ~/.i3/config ~/Config/i3/config
 
-    gitsave "$@"
+  gitsave "$@"
 }
 
 # Stupid Things :
