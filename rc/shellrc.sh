@@ -538,7 +538,7 @@ getconfig()
   fi
 }
 
-configsave()
+saveconfig()
 {
   if [ $# -eq 0 ]; then
     cp ~/.i3/config ~/Config/i3/config
@@ -580,6 +580,7 @@ configsave()
 }
 
 alias getbash='getconfig bash; srcsh'
+alias savebash='saveconfig bash'
 
 alias whatsnew='~/Config/bin/scripts/modifbash.sh notclean'
 alias cleanwhatsnew='~/Config/bin/scripts/modifbash.sh clean'
