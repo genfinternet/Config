@@ -1,7 +1,7 @@
 set $mod Mod4
 font pango:monospace 8
 
-exec_always feh --bg-fill /home/genfinternet/Wallpaper/mickey.png
+exec_always feh --bg-fill /home/genfinternet/Pictures/Wallpaper/mickey.png
 exec_always setxkbmap fr
 exec_always xset -b
 exec_always xset r rate 250 30
@@ -106,8 +106,8 @@ bar {
 
 bindsym $mod+Return exec xterm -bg grey7 -fg white
 bindsym $mod+Shift+Return exec xterm -bg grey7 -fg white
-bindsym $mod+BackSpace exec xterm -e 'sh /nfs/home/epita_2018/piriou_a/Config/bin/scripts/dead_lock.sh'
-#bindsym $mod+Return exec /nfs/home/epita_2018/piriou_a/.my_bin/epi3lock -i ~/Wallpaper/lock2.png -N lol_nope; 
+#bindsym $mod+BackSpace exec xterm -e 'sh /nfs/home/epita_2018/piriou_a/Config/bin/scripts/dead_lock.sh'
+bindsym $mod+BackSpace exec /home/genfinternet/.my_bin/epi3lock -i ~/Wallpaper/biblioteque.png;
 bindsym $mod+c exec google-chrome-stable
  
 #Workspace 1
