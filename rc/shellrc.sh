@@ -24,11 +24,14 @@
 #          EXPORTS           #
 #                            #
 ##############################
+
+# Contain most exports or configuration variable
 source ~/.export.sh
 
-export NNTPSERVER=news.epita.fr
-#export CC="perl ~/Config/rsrc/bin/colorgcc.perl"
 
+# Since the same config file can be used across all your device, you can use
+# this part to define specific aliases, for example here the number of core make
+# shall use. The location shall be defined in .bashrc or .export.sh
 
 if [ $LOCATION = "laptop" ]; then
   eval $(thefuck --alias)
@@ -41,6 +44,10 @@ elif [ $LOCATION = "home" ]; then
 else
   echo -e "\e[33mUnknown location\e[0m"
 fi
+
+# You can also use the same file for different Shell 
+# example here : a somewhat okay configuration for bash
+#                a bad one for zsh (sorry)).
 
 if [ $SHELL = "bash" ]; then
   export PROMPT_COMMAND=prompt
@@ -83,12 +90,15 @@ fi
 #                            #
 ##############################
 
+# This directory is one I use for experiments, you can do things in it then
+# erase it without worrying about where you were
+
 alias cdtrash='cd ~/Trash'
 alias cltrash='rm ~/Trash/* -rf'
 
 cdp()
 {
-  cd ~/Project 2>/dev/null
+  cd $MAIN_PROJECT_DIR 2>/dev/null
   if [ $# -eq 0 ]; then
     cd $CURRENT_PROJECT 2>/dev/null
     if [ $? -gt 0 ]; then
@@ -118,7 +128,7 @@ cdp()
 
 function cdd()
 {
-  cd ~/Perso
+  cd $CUSTOM_PROJECT_DIR
   for i in $@; do
     cd $i*
   done
@@ -126,13 +136,13 @@ function cdd()
 
 function cdc()
 {
-  cd ~/Config
+  cd $CONFIG_GIT_DIR
   for i in $@; do
     cd $i*
   done
 }
 
-function up( )
+function up()
 {
   if [ $# -eq 0 ]; then
     LIMIT=1
@@ -170,34 +180,24 @@ function back()
 #                            #
 ##############################
 
+# Honnestly you should probably delete this whole section.
 alias turtle="echo -e \"Do \e[4;1;31mNOT\e[0m touch the \e[1;5;4;31mTurtle\""
-CAPSON()
-{
-  if [ `COLS` -gt 150 ]; then
-    cat ~/Config/rsrc/other/ascii/CAPSONCAPSOFF
-  else
-    echo CAPS LOCK CONNARD !
-  fi
-}
-alias caps='echo -e -n "\e[1;5;31m" ;CAPSON ;echo -e -n "\n\e[0m\n"'
 
-alias LS='caps;ls'
-alias SL='caps;sl'
-alias sl='cl; echo -e "\e[31;1m3"; sleep 1; cl; echo 2; sleep 1; cl; echo 1; sleep 1; echo -e "\e[0m"; sl; cl'
-alias CD='caps;cd'
-alias VIM='caps;vim'
-alias TREE='caps;tree'
-alias LA='caps;la'
-alias RM='caps;rm'
-alias CL='caps;cl'
-alias CDP='caps;cdp'
+alias LS='ls'
+# If you do not like that you should probably change it to ls
+alias SL='sl'
+alias CD='cd'
+alias VIM='vim'
+alias TREE='tree'
+alias LA='la'
+alias RM='rm'
+alias CL='cl'
+alias CDP='cdp'
 
-alias emacs='echo non'
+# Let's start a flame war
+alias emacs='echo "You should really use vim instead"; sleep 1; vim'
 
-alias paint='echo kryta'
-alias sound='echo pavucontrol'
-
-alias excuse='~/Config/bin/scripts/excuse.sh'
+alias excuse="$CONFIG_GIT_DIR/scripts/excuse.sh"
 
 ##############################
 #                            #
@@ -209,8 +209,8 @@ alias excuse='~/Config/bin/scripts/excuse.sh'
 alias gcc='gcc -Werror -Wall -Wextra -pedantic -std=c99'
 # Just kidding
 unalias gcc
-# Now for real
-alias gcc='perl ~/Config/bin/scripts/colorgcc.perl'
+# Now for real, color gcc output
+alias gcc="perl $CONFIG_GIT_OTHER/bin/scripts/colorgcc.perl"
 
 alias LINES='tput lines'
 alias COLS='tput cols'
@@ -229,28 +229,30 @@ alias ftpile="untpile;tpile"
 
 alias wifi-menu="sudo wifi-menu"
 
-alias sql='~/Config/bin/scripts/postgres.sh'
-alias valgrind='~/Config/rsrc/bin/scripts/valgrind-color.sh'
-alias const='~/Config/bin/tools/getconstructor.sh'
-alias tpile=". ~/Config/rsrc/bin/scripts/compile_tiger.sh"
+alias sql="$CONFIG_GIT_DIR/bin/scripts/postgres.sh"
+alias valgrind="$CONFIG_OTHER_DIR/bin/scripts/valgrind-color.sh"
+alias const="$CONFIG_GIT_DIR/bin/tools/getconstructor.sh"
+alias tpile=". $CONFIG_GIT_DIR/bin/scripts/compile_tiger.sh"
 
-alias ratp='~/Config/bin/scripts/ratp.sh'
+# This script is used to get the next transport for me, you'll need to adapt it
+alias ratp="$CONFIG_GIT_DIR/bin/scripts/ratp.sh"
 alias rmswp='rm `find . | grep -E "^\..*\.sw[pon]$"`'
+
 alias gdb='gdb -q'
 alias python3="python3 -q"
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias la='ls -a'
 alias ll='ls -l' 
-alias lll='~/Config/bin/tools/ll.sh'
 alias lla='ls -a -l'
 alias tree='tree -C'
 alias vlgless='valgrind'
 alias vlg='valgrind --leak-check=full --show-reachable=yes'
 alias vlfull='valgrind --leak-check=full -v --show-reachable=yes'
 
+# Color the output of man
 man() {
-  # Respectively
+  #   Respectively
   #   Never saw it used in man page
   #   Title, options.
   #   Text in option
@@ -275,6 +277,7 @@ man() {
 #                            #
 ##############################
 
+# Dirty trick because I haven't configure it properly yet
 function resetadb()
 {
   adb kill-server
@@ -282,22 +285,35 @@ function resetadb()
   adb devices
 }
 
-alias password="~/Config/bin/tools/password.sh"
-#Search a motif into all file in subdirectory
-alias grepc="~/Config/bin/tools/grepc.sh"
-alias fixme='grepc "(//\s*FIXME)|(--\s*FIXME)|(/\*\s*FIXME\s*\*/)|(#\s*FIXME)"'
-#Search for a file
-alias gfind="~/Config/bin/tools/gfind.sh"
+# A very weak (very very weak) password protection for some scripts
+# DO NOT USE FOR ANYTHING REMOTLY IMPORTANT
+# DO NOT USE YOUR ROOT PASSWORD FOR THIS
+alias password="$CONFIG_GIT_DIR/bin/tools/password.sh"
 
-alias mount='~/Config/bin/tools/mount.sh'
-alias umount='~/Config/bin/tools/umount.sh'
-# Check coding style
-alias ccs='sh ~/Config/bin/scripts/checkcodingstyle.sh'
+# Search a motif into all file in subdirectory (Can be long if there is a lot of
+# files)
+alias grepc="$CONFIG_GIT_DIR/bin/tools/grepc.sh"
+alias fixme='grepc "(//\s*FIXME)|(--\s*FIXME)|(/\*\s*FIXME\s*\*/)|(#\s*FIXME)"'
+
+# Search for a file (Can be long if there is a lot of subdirectory)
+alias gfind="$CONFIG_GIT_DIR/bin/tools/gfind.sh"
+
+# This is for my convenience, you might need to change them for your use
+alias mount="$CONFIG_GIT_DIR/bin/tools/mount.sh"
+alias umount="$CONFIG_GIT_DIR/bin/tools/umount.sh"
+
+# Check coding style, it's highly probable you don't need the next two
+# just delete them
+alias ccs="sh $CONFIG_GIT_DIR/bin/scripts/checkcodingstyle.sh"
 alias ccsprojekt='cl;ccs; ccs README TODO AUTHORS'
+
+
+# Those aliases commit all file matching an extention in subdirectory
+# Be carefull when you use it. 
+# I mean don't use it, it defeats the purpose of version control.
 alias javacommitall="fun_commitall java"
 alias commitall="fun_commitall"
 alias autocommit="fun_commitall $SUPPORTED_EXTENTIONS"
-
 function fun_commitall()
 {
   if [ -f "./build.xml" ]; then
@@ -309,7 +325,7 @@ function fun_commitall()
     git commit -m "Add Makefile"
   fi
   for i in $@; do
-    for i in `find src tests | grep -E "\.$i\$"`; do
+    for i in `find . | grep -E "\.$i\$"`; do
       if [ -f $i ]; then
         git add $i
         git commit -m"Add `basename $i | sed -E "s/(.*)\.(.*)/\2 file : \1/g"`"
@@ -318,7 +334,8 @@ function fun_commitall()
   done
 }
 
-alias change=". ~/Config/bin/tools/change.sh"
+# Change script, very usefull, you should check it out
+alias change=". $CONFIG_GIT_DIR/bin/tools/change.sh"
 alias ccp="change project"
 alias ccb="change bdd"
 alias revert="change revert"
@@ -343,11 +360,8 @@ function sedit()
   fi
 }
 
-
-alias buildall='cd ~/Project; for i in `ls`; do echo -e "\e[34;1mBuilding Project: \e[0m\`\e[35;1m"$i"\e[0m\047" ; cd $i ; (make 2>/dev/null 1>/dev/null); cd ..; done'
-alias cleanall='cd ~/Project; for i in `ls`; do echo -e "\e[34;1mCleaning Project: \e[0m\`\e[35;1m"$i"\e[0m\047" ; cd $i ; (make clean 2>/dev/null 1>/dev/null); cd ..; done'
-
-
+# This one isn't from me, I picked it up on internet
+# and I've been unable to track the original author
 extract () {
   if [ -f $1 ] ; then
     case $1 in
@@ -370,22 +384,16 @@ extract () {
   fi
 }
 
-log_output()
-{
-  if [ $# -gt 0 ]; then
-    $@ 1>stdout_$1 2>stderr_$1
-  else
-    rm stderr_* stdout_* -i
-  fi
-}
-
-
+# Create a directory and cd inside
 mkcd()
 {
   mkdir $@
   cd $@
 }
 
+# Cd inside a directory and display its content
+# You might want to use it as your default cd behaviour, i'm not a fan
+# alias cd="cs"
 cs()
 {
   cd "$@";
@@ -398,17 +406,17 @@ cs()
 #                            #
 ##############################
 
-alias todo="~/Config/bin/scripts/todo.sh"
+alias todo="$CONFIG_GIT_DIR/bin/scripts/todo.sh"
 
 # Makefile :
-alias nmk='cp ~/Config/template/makefiles/Makefile Makefile'
+alias nmk="cp $CONFIG_GIT_DIR/template/makefiles/Makefile Makefile"
 
 # Other File:
-alias nTODO='cp ~/Config/template/other/TODO .'
-alias nREADME='cp ~/Config/template/other/README .'
+alias nTODO="cp $CONFIG_GIT_DIR/template/other/TODO ."
+alias nREADME="cp $CONFIG_GIT_DIR/template/other/README ."
 alias nAUTHORS='AUTHORS'
 alias AUTHORS='> AUTHORS echo "* piriou_a";chmod 640 AUTHORS'
-alias ngitignore='cp ~/Config/template/other/gitignore ./.gitignore'
+alias ngitignore="cp $CONFIG_GIT_DIR/template/other/gitignore ./.gitignore"
 
 
 ##############################
@@ -421,28 +429,33 @@ alias vimrc='vim ~/.vimrc'
 alias vimrt='vim -O README TODO'
 alias vimm='\vim'
 #Treats vim arguments to know which file to open
-alias vim="~/Config/bin/tools/vim.sh"
+alias vim="$CONFIG_GIT_DIR/bin/tools/vim.sh"
 
 ##############################
 #                            #
 #             GIT            #
 #                            #
 ##############################
+# An awesome one liner I picked up on internet to display a git repo with its
+# branch
 alias lg1='log --graph --abbrev-commit --decorate --date=relative --format=format:"%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)" --all'
 
 if [ "$LOCATION" != "pxe" ]; then
+  # Ruby gem script, display work distribution
   alias blame='git-fame'
-else
-  alias blame='~/Config/rsrc/bin/scripts/gitblame.sh'
 fi
 
+# I do not have an explanation for this one
 howmanycommitbitch()
 {
-  a=$((`git shortlog | wc -l` - 2))
-  if [ $a -gt 1 ]; then
-    echo "You made $a commits bitch!"
+  sum=0
+  for i in `git shortlog | grep -E  ".* \([0-9]+\):" | grep -o -E "[0-9]+"`; do
+    sum=$(($sum + $i))
+  done
+  if [ $sum -gt 1 ]; then
+    echo "You made $sum commits bitch!"
   else
-    echo "You made $a commit bitch!"
+    echo "You made $sum commit bitch!"
   fi
 }
 
@@ -456,8 +469,8 @@ alias log='git log'
 alias slog='git shortlog'
 alias branch='git branch'
 
-alias submission='~/Config/bin/tools/pushtags.sh'
-alias pushtags='~/Config/bin/tools/pushtags.sh'
+alias pushtags="submission"
+alias submission="$CONFIG_GIT_DIR/bin/tools/pushtags.sh"
 
 alias gitpull='gpull'
 gpull()
@@ -488,7 +501,7 @@ gpush()
   fi
 }
 
-alias mkrepo="~/Config/bin/scripts/mkrepo.sh"
+alias mkrepo="$CONFIG_GIT_DIR/bin/scripts/mkrepo.sh"
 
 
 ##############################
@@ -501,36 +514,36 @@ alias mkrepo="~/Config/bin/scripts/mkrepo.sh"
 getconfig()
 {
   if [ $# -eq 0 ]; then
-    cp ~/Config/i3/config ~/.i3/config
-    cp ~/Config/i3/i3status.conf ~/.i3status.conf
-    cp ~/Config/rc/shellrc.sh ~/.shellrc.sh
-    cp ~/Config/rc/bashrc ~/.bashrc
-    cp ~/Config/vim/vimrc ~/.vimrc
-    cp ~/Config/X/Xdefaults ~/.Xdefaults
+    cp $CONFIG_GIT_DIR/i3/config ~/.i3/config
+    cp $CONFIG_GIT_DIR/i3/i3status.conf ~/.i3status.conf
+    cp $CONFIG_GIT_DIR/rc/shellrc.sh ~/.shellrc.sh
+    cp $CONFIG_GIT_DIR/rc/bashrc ~/.bashrc
+    cp $CONFIG_GIT_DIR/vim/vimrc ~/.vimrc
+    cp $CONFIG_GIT_DIR/X/Xdefaults ~/.Xdefaults
   else
     while [ $# -ne 0 ]; do
       case $1 in
         i3)
-          cp ~/Config/i3/config ~/.i3/config
-          cp ~/Config/i3/i3status.conf ~/.i3status.conf
+          cp $CONFIG_GIT_DIR/i3/config ~/.i3/config
+          cp $CONFIG_GIT_DIR/i3/i3status.conf ~/.i3status.conf
           ;;
         bash)
-          cp ~/Config/rc/shellrc.sh ~/.shellrc.sh
-          cp ~/Config/rc/bashrc ~/.bashrc
+          cp $CONFIG_GIT_DIR/rc/shellrc.sh ~/.shellrc.sh
+          cp $CONFIG_GIT_DIR/rc/bashrc ~/.bashrc
           ;;
         vim)
-          cp ~/Config/vim/vimrc ~/.vimrc
+          cp $CONFIG_GIT_DIR/vim/vimrc ~/.vimrc
           ;;
         X)
-          cp ~/Config/X/Xdefaults ~/.Xdefaults
+          cp $CONFIG_GIT_DIR/X/Xdefaults ~/.Xdefaults
           ;;
         all)
-          cp ~/Config/i3/config ~/.i3/config
-          cp ~/Config/i3/i3status.conf ~/.i3status.conf
-          cp ~/Config/rc/shellrc.sh ~/.shellrc.sh
-          cp ~/Config/rc/bashrc ~/.bashrc
-          cp ~/Config/vim/vimrc ~/.vimrc
-          cp ~/Config/X/Xdefaults ~/.Xdefaults
+          cp $CONFIG_GIT_DIR/i3/config ~/.i3/config
+          cp $CONFIG_GIT_DIR/i3/i3status.conf ~/.i3status.conf
+          cp $CONFIG_GIT_DIR/rc/shellrc.sh ~/.shellrc.sh
+          cp $CONFIG_GIT_DIR/rc/bashrc ~/.bashrc
+          cp $CONFIG_GIT_DIR/vim/vimrc ~/.vimrc
+          cp $CONFIG_GIT_DIR/X/Xdefaults ~/.Xdefaults
           ;;
       esac
       shift
@@ -541,37 +554,36 @@ getconfig()
 saveconfig()
 {
   if [ $# -eq 0 ]; then
-    cp ~/.i3/config ~/Config/i3/config
-    cp ~/.i3status.conf ~/Config/i3/i3status.conf
-    cp ~/.shellrc.sh ~/Config/rc/shellrc.sh
-    cp ~/.bashrc ~/Config/rc/bashrc
-    cp ~/.vimrc ~/Config/vim/vimrc
-    cp ~/.Xdefaults ~/Config/X/Xdefaults
+    cp ~/.i3/config     $CONFIG_GIT_DIR/i3/config
+    cp ~/.i3status.conf $CONFIG_GIT_DIR/i3/i3status.conf
+    cp ~/.shellrc.sh    $CONFIG_GIT_DIR/rc/shellrc.sh
+    cp ~/.bashrc        $CONFIG_GIT_DIR/rc/bashrc
+    cp ~/.vimrc         $CONFIG_GIT_DIR/vim/vimrc
+    cp ~/.Xdefaults     $CONFIG_GIT_DIR/X/Xdefaults
   else
     while [ $# -ne 0 ]; do
       case $1 in
         i3)
-          cp ~/.i3/config ~/Config/i3/config
-          cp ~/.i3status.conf ~/Config/i3/i3status.conf
+          cp ~/.i3/config     $CONFIG_GIT_DIR/i3/config
+          cp ~/.i3status.conf $CONFIG_GIT_DIR/i3/i3status.conf
           ;;
         bash)
-          cp ~/.shellrc.sh ~/Config/rc/shellrc.sh
-          cp ~/.bashrc ~/Config/rc/bashrc
+          cp ~/.shellrc.sh    $CONFIG_GIT_DIR/rc/shellrc.sh
+          cp ~/.bashrc        $CONFIG_GIT_DIR/rc/bashrc
           ;;
         vim)
-          cp ~/.vimrc ~/Config/vim/vimrc
+          cp ~/.vimrc         $CONFIG_GIT_DIR/vim/vimrc
           ;;
         X)
-          cp ~/.Xdefaults ~/Config/X/Xdefaults
+          cp ~/.Xdefaults     $CONFIG_GIT_DIR/X/Xdefaults
           ;;
         all)
-          echo "all"
-          cp ~/.i3/config ~/Config/i3/config
-          cp ~/.i3status.conf ~/Config/i3/i3status.conf
-          cp ~/.shellrc.sh ~/Config/rc/shellrc.sh
-          cp ~/.bashrc ~/Config/rc/bashrc
-          cp ~/.vimrc ~/Config/vim/vimrc
-          cp ~/.Xdefaults ~/Config/X/Xdefaults
+          cp ~/.i3/config     $CONFIG_GIT_DIR/i3/config
+          cp ~/.i3status.conf $CONFIG_GIT_DIR/i3/i3status.conf
+          cp ~/.shellrc.sh    $CONFIG_GIT_DIR/rc/shellrc.sh
+          cp ~/.bashrc        $CONFIG_GIT_DIR/rc/bashrc
+          cp ~/.vimrc         $CONFIG_GIT_DIR/vim/vimrc
+          cp ~/.Xdefaults     $CONFIG_GIT_DIR/X/Xdefaults
           ;;
       esac
       shift
@@ -582,40 +594,8 @@ saveconfig()
 alias getbash='getconfig bash; srcsh'
 alias savebash='saveconfig bash'
 
-alias whatsnew='~/Config/bin/scripts/modifbash.sh notclean'
-alias cleanwhatsnew='~/Config/bin/scripts/modifbash.sh clean'
-
-gitsave()
-{
-  cd ~/Config
-  add --all
-  if [ $# -eq 0 ]; then
-    git commit -m "Auto save message"
-  else
-    git commit -m "$@"
-  fi
-  git push origin master
-}
-
-gitsaveall()
-{
-  cp ~/.shellrc.sh ~/Config/rc/shellrc.sh
-  cp ~/.vimrc ~/Config/rc/vimrc
-  cp ~/.i3/config ~/Config/i3/config
-
-  gitsave "$@"
-}
-
-# Stupid Things :
-alias slowswapper='xmodmap ~/Config/x/slowswapper'
-alias tsu='cat ~/Config/rsrc/other/ascii/Tsu'
-
-
-# YOU CAN'T KILL THE HUNGRY RABBIT
-# Confloose : 
-alias bunny2='sh ~/Config/confloose/bunny2.sh'
-alias challenge="echo -e \"try to delete the file called \\\`\\e[32;1m?[0\e[0m\\\e[0m'\";touch $'\033'\[0; ls"
-alias clearchallenge="rm $'\033'\[0"
+alias whatsnew="$CONFIG_GIT_DIR/bin/scripts/modifbash.sh notclean"
+alias cleanwhatsnew="$CONFIG_GIT_DIR/bin/scripts/modifbash.sh clean"
 
 ##############################
 #                            #
@@ -624,4 +604,4 @@ alias clearchallenge="rm $'\033'\[0"
 ##############################
 
 #xset r rate 250 50
-source ~/Config/bin/tools/fuckyou.sh
+source $CONFIG_GIT_DIR/bin/tools/fuckyou.sh

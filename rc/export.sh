@@ -1,5 +1,24 @@
 ##############################
 #                            #
+#        CONFIGURATION       #
+#                            #
+##############################
+
+# Directory to store scripts and config file. Can be accessed with the `cdc'
+# alias
+export CONFIG_GIT_DIR="$HOME/Config"
+
+# Directory used to store scripts and config file (this directory does not use
+# version control and is used for scripts I didn't write)
+export CONFIG_OTHER_DIR="$HOME/Config/rsrc"
+
+# Directory for all your project. Can be accessed with the `cdp' alias
+export MAIN_PROJECT_DIR="$HOME/Project"
+# Directory for all your project. Can be accessed with the `cdd' alias
+export CUSTOM_PROJECT_DIR="$HOME/Perso"
+
+##############################
+#                            #
 #     CHANGEABLE EXPORTS     #
 #                            #
 ##############################
@@ -9,9 +28,20 @@ export EDITOR="vim"
 export FLAG_DEBUG="off"
 export FLAG_VERBOSE="off"
 
-export SUPPORTED_EXTENTIONS="sql ll yy sh hxx hh cc h c "
+export SUPPORTED_EXTENTIONS="py sql ll yy sh hxx hh cc h c java"
 export PRIORITY_PICKS="hxx cc hh"
 
-export CURRENT_PROJECT="DBZ"
+export CURRENT_PROJECT="MYPHOTOSHOP"
 export TIGER_DIR="/tmp/tiger"
-export CURRENT_BDD="rush_bdd"
+export CURRENT_BDD="samedi_matin"
+
+
+##############################
+#                            #
+#        OTHER EXPORTS       #
+#                            #
+##############################
+export NNTPSERVER="news.epita.fr"
+export LOCK="~/.my_bin/epi3lock"
+export WALLPAPER="~/Pictures/Wallpaper/mickey.png"
+export LOCKSCREEN="~/Pictures/Wallpaper/biblioteque.png"
