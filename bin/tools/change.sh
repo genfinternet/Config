@@ -122,6 +122,6 @@ else
         bdd)        shift; change_bdd $@;;
         tiger)      shift; change_tiger $@;;
         revert)     revert_change;;
-        *)          echo -e "\e[33;1mInvalid flag, use verbose, debug, picks, file, project, bdd, tiger or revert\e[0m";;
+        *)          echo -e "\e[33;1mInvalid flag, use verbose, debug, picks, files, project, bdd, tiger or revert\e[0m";;
     esac
 fi
