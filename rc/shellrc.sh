@@ -503,6 +503,31 @@ gpush()
 
 alias mkrepo="$CONFIG_GIT_DIR/bin/scripts/mkrepo.sh"
 
+function swapauthorgit()
+{
+  echo -e -n "\e[32;1mUsing this function is dangerous and will rewrite your"
+  echo -e -n " entire commit history, do you wish to proceed (Y/n): \e[0m"
+  read -r CHOICE
+  CHOICE=`echo "$CHOICE" | tr '[:upper:]' '[:lower:]'`
+  if [ -z "$CHOICE" ] || [ "$CHOICE" = "y" ] || [ "$CHOICE" = "yes" ]; then
+    echo -e -n "\e[36;1mWhat's the old name of the commiter: \e[0m"
+    read -r OLD_NAME
+    echo -e -n "\e[36;1mWhat's the old email of the commiter: \e[0m"
+    read -r OLD_EMAIL
+    echo -e -n "\e[36;1mWhat's the new author's name: \e[0m"
+    read -r NEW_NAME
+    echo -e -n "\e[36;1mWhat's the new author's email: \e[0m"
+    read -r NEW_EMAIL
+    echo -e -n "\e[32;1mYou're about to replace all commit of $OLD_NAME"
+    echo -e -n " ($OLD_EMAIL) by $NEW_NAME ($NEW_EMAIL), do you wish"
+    echo -e -n " to proceed (y/N): \e[0m"
+    read -r CHOICE
+    CHOICE=`echo "$CHOICE" | tr '[:upper:]' '[:lower:]'`
+    if [ "$CHOICE" = "y" ] || [ "$CHOICE" = "yes" ]; then
+      git filter-branch -f --env-filter "GIT_AUTHOR_NAME=$NEW_NAME; GIT_AUTHOR_EMAIL=$NEW_EMAIL; GIT_COMMITTER_NAME=$OLD_NAME; GIT_COMMITTER_EMAIL=$OLD_EMAIL;" HEAD
+    fi
+  fi
+}
 
 ##############################
 #                            #
