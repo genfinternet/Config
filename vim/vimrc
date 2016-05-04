@@ -1,8 +1,8 @@
 set nocompatible
 
-"Yes i'm weak
+"Once you activate this you'll need to hold shift to use text selection to/from
+"outside vim.
 set mouse=a
-"Please don 't hit me I swear I don't use it that much
 
 set autoread
 
