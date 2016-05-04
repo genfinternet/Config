@@ -17,24 +17,24 @@ repository and I'll most likely add links to those later.
 
 Architecture
 ============
-    .
-    ├── bin
-    │   │
-    │   ├── scripts     Interactive scripts
-    │   └── tools       Tool scripts
-    │
-    ├── i3              I3 config files
-    │
-    ├── rc              Shell config files
-    │
-    ├── template
-    │   │
-    │   ├── makefile    Template for makefiles
-    │   └── other       Other templates
-    │
-    ├── vim             Vim config files
-    │
-    └── X               X config files
+  .
+  ├── bin
+  │   │
+  │   ├── scripts     Interactive scripts
+  │   └── tools       Tool scripts
+  │
+  ├── i3              I3 config files
+  │
+  ├── rc              Shell config files
+  │
+  ├── template
+  │   │
+  │   ├── makefile    Template for makefiles
+  │   └── other       Other templates
+  │
+  ├── vim             Vim config files
+  │
+  └── X               X config files
 
 Usage
 =====
