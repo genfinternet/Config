@@ -531,13 +531,46 @@ function changegituser()
 
 function swapgituser()
 {
-    echo -e -n "\e[36;1mWhat shall the name of the commiter be: \e[0m"
-    read -r NAME
-    echo -e -n "\e[36;1mWhat the email of the commiter be: \e[0m"
-    read -r EMAIL
+    NAME=""
+    EMAIL=""
+    while [ $# -ne 0 ]; do
+        case $1 in
+            -n)
+                shift
+                NAME="$1"
+                ;;
+            -m)
+                shift
+                EMAIL="$1"
+                ;;
+            -h)
+                echo >&2 -e -n "\e[33;1m"
+                echo "Help you changing your git user locally"
+                echo "Usage: swapgituser [-n NAME] [-m EMAIL]"
+                echo >&2 -e -n "\e[33;1m\e[0m"
+                ;;
+            --help)
+                ;;
+            *)
+                echo >&2 -e "\e[33;1mIgnored argument $1\e[0m"
+                ;;
+        esac
+        shift
+    done
+    while [ -z "$NAME" ]; do
+        echo -e -n "\e[34;1mWhat shall the name of the commiter be: \e[0m"
+        read -r NAME
+    done
+    while [ -z "$EMAIL" ]; do
+        echo -e -n "\e[34;1mWhat the email of the commiter be: \e[0m"
+        read -r EMAIL
+    done
+    echo -e "\e[34;1mChanging username to \`\e[36;1m$NAME\e[34;1m': \e[0m"
+    echo -e "\e[34;1mChanging email to \`\e[36;1m$EMAIL\e[34;1m': \e[0m"
     git config user.name "$NAME"
     git config user.email "$EMAIL"
-    echo -e "\e[36;1mIf you want to rewrite the history as well you can call \`changegituser': \e[0m"
+    echo -e -n "\e[34;1mIf you want to rewrite the history as well"
+    echo -e " you can call \`\e[36;1mchangegituser\e[34;1m': \e[0m"
 }
 
 ##############################
