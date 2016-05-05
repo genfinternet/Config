@@ -503,7 +503,7 @@ gpush()
 
 alias mkrepo="$CONFIG_GIT_DIR/bin/scripts/mkrepo.sh"
 
-function swapauthorgit()
+function changegituser()
 {
   echo -e -n "\e[32;1mUsing this function is dangerous and will rewrite your"
   echo -e -n " entire commit history, do you wish to proceed (Y/n): \e[0m"
@@ -527,6 +527,17 @@ function swapauthorgit()
       git filter-branch -f --env-filter "GIT_AUTHOR_NAME=$NEW_NAME; GIT_AUTHOR_EMAIL=$NEW_EMAIL; GIT_COMMITTER_NAME=$OLD_NAME; GIT_COMMITTER_EMAIL=$OLD_EMAIL;" HEAD
     fi
   fi
+}
+
+function swapgituser()
+{
+    echo -e -n "\e[36;1mWhat shall the name of the commiter be: \e[0m"
+    read -r NAME
+    echo -e -n "\e[36;1mWhat the email of the commiter be: \e[0m"
+    read -r EMAIL
+    git config user.name "$NAME"
+    git config user.email "$EMAIL"
+    echo -e "\e[36;1mIf you want to rewrite the history as well you can call \`changegituser': \e[0m"
 }
 
 ##############################
