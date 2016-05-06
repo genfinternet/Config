@@ -173,7 +173,7 @@ function create_py()
     if [ $? -eq 0 ]; then
         touch $1
         chmod 740 $1
-        echo -e "#!/bin/python3\n\n">>$1
+        echo -e "#!/usr/bin/env python3\n\n">>$1
     fi
 }
 
