@@ -1,5 +1,7 @@
 #!/bin/sh
 
+#TODO prompt to force if tag already exists
+
 echo -e "\e[34mWelcome to the push tag assistant by \e[36mgenfinternet\e[0m"
 
 if [ $# -eq 0 ]; then
