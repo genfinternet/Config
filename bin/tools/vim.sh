@@ -67,7 +67,7 @@ function create_java()
     fi
 }
 
-function create_cc()
+function create_html()
 {
     exist_file $1
     if [ $? -eq 0 ]; then
@@ -75,7 +75,33 @@ function create_cc()
         a=`basename $1`
         a="${a%.*}"
         name=`echo $a | sed "s/\([a-z]\)/\L\1/g"`
-        class=`echo $name | sed "s/-\([a-z]\)/\U\1/g" | sed "s/\(^[a-z]\)/\U\1/g"`
+        class=`echo $name | sed -r -e "s/(_|-)/ /g" -e "s/(^| )([a-z])/\1\U\2/g"`
+    fi
+    echo >>$1 "<!doctype html>"
+    echo >>$1 "<html lang="en">"
+    echo >>$1 "  <head>"
+    echo >>$1 "    <meta charset="utf-8">"
+    echo >>$1 "    <meta http-equiv="x-ua-compatible" content="ie=edge">"
+    echo >>$1 "    <meta http-equiv="x-ua-compatible" content="ie=edge">"
+    echo >>$1 "    <title>$class</title>"
+    echo >>$1 ""
+    echo >>$1 "    <!-- bootstrap css -->"
+    echo >>$1 "    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">"
+    echo >>$1 "  </head>"
+    echo >>$1 "  <body>"
+    echo >>$1 "  </body>"
+    echo >>$1 "</html>"
+}
+
+function create_cc()
+{
+    exist_file $1
+    if [ $? -eq 0 ]; then
+        touch $1
+        a=`basename $1`
+        a="${a%.*}"
+        name=`echo $a | sed "s/\([a-z]\)/\l\1/g"`
+        class=`echo $name | sed "s/-\([a-z]\)/\u\1/g" | sed "s/\(^[a-z]\)/\u\1/g"`
         echo "/**" >>$1
         echo " ** \file $name.cc" >>$1
         echo " ** \brief Implementation of $class" >>$1
