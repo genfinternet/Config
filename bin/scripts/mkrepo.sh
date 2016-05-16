@@ -41,7 +41,7 @@ README: Empty
     mkdir src
     mkdir tests
     mkdir lib
-    mkdir rscr
+    mkdir rsrc
     #Add build.xml / Makefile here depending on priority picks
 }
 
