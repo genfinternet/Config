@@ -153,6 +153,27 @@ class Todo:
         for m in self.mainparts:
             m.write(f)
 
+    def rename(self, section, newname):
+        i = 0
+        for m in self.mainparts:
+            i = i + 1
+            roman=toRoman(i)
+            if roman == section:
+                m.name=newname
+                return
+            j = 0
+            k = 0
+            for s in m.subparts:
+                j = j + 1
+                if roman + "." + str(j) == section:
+                    s.name=newname
+                    return
+                k = 0
+                for t in s.tasks:
+                    k = k + 1
+                    if roman + "." + str(j) + "." + str(k) == section:
+                        t.name=newname
+                        return
     def print(self):
         i = 0
         maxi = -1
@@ -248,7 +269,8 @@ def display_help():
 
 
 def menu(filepath, project : Todo):
-    choice=query_menu("Enter a command")
+    choices=query_menu("Enter a command")
+    choice=choices[0]
     if choice == 0: # Quit without saving
         return False
     elif choice == 1: # Save and quit
@@ -267,6 +289,13 @@ def menu(filepath, project : Todo):
         project.write(f)
         print("Project saved to file")
         return True
+    elif choice == 5:
+        if len(choices[1]) != 3:
+            print("Usage:")
+            print("  rename section new_name")
+        else:
+            project.rename(choices[1][1], choices[1][2])
+        return True
     else:
         return True #Shall not happen
 
@@ -279,14 +308,14 @@ def menu_loop(filepath, project : Todo=None):
 
 def query_menu(question):
     valid = {"exit": 0, "quit" : 1, "help" : 2, "print" : 3, \
-            "save" : 4 }
+            "save" : 4, "rename" : 5 }
     prompt = " (help/exit): "
-
     while True:
         sys.stdout.write(question + prompt)
-        choice = input().lower()
-        if not choice == '' and choice in valid:
-            return valid[choice]
+        choice = input()
+        args=choice.split(" ", 2)
+        if not choice == '' and args[0].lower() in valid:
+            return (valid[args[0].lower()], args)
         else:
             print("Please enter a valid command.")
 
