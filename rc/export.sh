@@ -41,7 +41,14 @@ export CURRENT_BDD="samedi_matin"
 #        OTHER EXPORTS       #
 #                            #
 ##############################
+
 export NNTPSERVER="news.epita.fr"
 export LOCK="~/.my_bin/epi3lock"
-export WALLPAPER="~/Pictures/Wallpaper/mickey.png"
-export LOCKSCREEN="~/Pictures/Wallpaper/biblioteque.png"
+size=`xrandr | grep -E "\*" | grep -E -o "[0-9]+x[0-9]+" | head -n 1`
+if [ -d "$HOME/Pictures/Wallpaper/$size" ]; then
+    export LOCKSCREEN="$HOME/Pictures/Wallpaper/$size/hal9000.png"
+else
+    export LOCKSCREEN=""
+fi
+export WALLPAPER="$HOME/Pictures/Wallpaper/mickey.png"
+export DEADLOCK="false"
