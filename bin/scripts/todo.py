@@ -3,7 +3,7 @@
 import argparse
 import os
 import sys
-
+import re
 parser = argparse.ArgumentParser(description='TODO Manager')
 parser.add_argument('-f', action="store", default="TODO.md", dest="f",
         help='Specify the todo file')
@@ -153,6 +153,148 @@ class Todo:
         for m in self.mainparts:
             m.write(f)
 
+    def toggle(self, section, state):
+        i = 0
+        sections = section.split(".")
+        size=len(sections)
+        if size == 1:
+            index1=fromRoman(sections[0]) - 1
+            size=len(self.mainparts) 
+            if size <= index1:
+               return 
+            for y in self.mainparts[index1].subparts:
+                for x in y.tasks:
+                    if state is None:
+                        x.done = not x.done
+                    else:
+                        b = state.lower()
+                        if b == "true" or b == "t":
+                            x.done = True
+                        elif b == "false" or b == "f":
+                            x.done = False
+                        else:
+                            print("Incorrect value enter false or true")
+        elif size == 2:
+            index1=fromRoman(sections[0]) - 1
+            index2=int(sections[1]) - 1
+            size=len(self.mainparts) 
+            if size <= index1:
+               return 
+            size=len(self.mainparts[index1].subparts) 
+            if size <= index2:
+               return 
+            size=len(self.mainparts[index1].subparts[index2].tasks) 
+            for x in self.mainparts[index1].subparts[index2].tasks:
+                if state is None:
+                    x.done = not x.done
+                else:
+                    b = state.lower()
+                    if b == "true" or b == "t":
+                        x.done = True
+                    elif b == "false" or b == "f":
+                        x.done = False
+                    else:
+                        print("Incorrect value enter false or true")
+                        return
+        elif size == 3:
+            index1=fromRoman(sections[0]) - 1
+            index2=int(sections[1]) - 1
+            index3=int(sections[2]) - 1
+            size=len(self.mainparts) 
+            if size <= index1:
+               return 
+            size=len(self.mainparts[index1].subparts) 
+            if size <= index2:
+               return 
+            size=len(self.mainparts[index1].subparts[index2].tasks) 
+            if size <= index3:
+               return 
+            x=self.mainparts[index1].subparts[index2].tasks[index3]
+            if state is None:
+                x.done = not x.done
+            else:
+                b = state.lower()
+                if b == "true" or b == "t":
+                    x.done = True
+                elif b == "false" or b == "f":
+                    x.done = False
+                else:
+                    print("Incorrect value enter false or true")
+                    return
+
+    def remove(self, section):
+        i = 0
+        sections = section.split(".")
+        size=len(sections)
+        if size == 1:
+            index1=fromRoman(sections[0]) - 1
+            size=len(self.mainparts) 
+            if size <= index1:
+               return
+            x=self.mainparts[index1]
+            self.mainparts.remove(x)
+        elif size == 2:
+            index1=fromRoman(sections[0]) - 1
+            index2=int(sections[1]) - 1
+            size=len(self.mainparts) 
+            if size <= index1:
+               return 
+            size=len(self.mainparts[index1].subparts) 
+            if size <= index2:
+               return 
+            x=self.mainparts[index1].subparts[index2]
+            self.mainparts[index1].subparts.remove(x)
+        elif size == 3:
+            index1=fromRoman(sections[0]) - 1
+            index2=int(sections[1]) - 1
+            index3=int(sections[2]) - 1
+            size=len(self.mainparts) 
+            if size <= index1:
+               return 
+            size=len(self.mainparts[index1].subparts) 
+            if size <= index2:
+               return 
+            size=len(self.mainparts[index1].subparts[index2].tasks) 
+            if size <= index3:
+               return 
+            x=self.mainparts[index1].subparts[index2].tasks[index3]
+            self.mainparts[index1].subparts[index2].tasks.remove(x)
+
+    def add(self, section, newname):
+        i = 0
+        sections = section.split(".")
+        size=len(sections)
+        if size == 1:
+            main = MainPart()
+            main.subparts = list()
+            main.name = newname
+            index1=fromRoman(sections[0]) - 1
+            self.mainparts.insert(index1, main)
+        elif size == 2:
+            sub = SubPart()
+            sub.tasks = list()
+            sub.name = newname
+            index1=fromRoman(sections[0]) - 1
+            index2=int(sections[1]) - 1
+            size=len(self.mainparts) 
+            if size <= index1:
+               index1 = size - 1
+            self.mainparts[index1].subparts.insert(index2, sub)
+        elif size == 3:
+            task = Tasks()
+            task.done = False
+            task.name = newname
+            index1=fromRoman(sections[0]) - 1
+            index2=int(sections[1]) - 1
+            index3=int(sections[2]) - 1
+            size=len(self.mainparts) 
+            if size <= index1:
+               index1 = size - 1
+            size=len(self.mainparts[index1].subparts) 
+            if size <= index2:
+                index2 = size - 1
+            self.mainparts[index1].subparts[index2].tasks.insert(index3, task)
+
     def rename(self, section, newname):
         i = 0
         for m in self.mainparts:
@@ -174,6 +316,7 @@ class Todo:
                     if roman + "." + str(j) + "." + str(k) == section:
                         t.name=newname
                         return
+   
     def print(self):
         i = 0
         maxi = -1
@@ -251,6 +394,33 @@ def toRoman(n):
             n -= integer
     return result
 
+romanNumeralPattern = re.compile("""
+    ^                   # beginning of string
+    M{0,4}              # thousands - 0 to 4 M's
+    (CM|CD|D?C{0,3})    # hundreds - 900 (CM), 400 (CD), 0-300 (0 to 3 C's),
+                        #            or 500-800 (D, followed by 0 to 3 C's)
+    (XC|XL|L?X{0,3})    # tens - 90 (XC), 40 (XL), 0-30 (0 to 3 X's),
+                        #        or 50-80 (L, followed by 0 to 3 X's)
+    (IX|IV|V?I{0,3})    # ones - 9 (IX), 4 (IV), 0-3 (0 to 3 I's),
+                        #        or 5-8 (V, followed by 0 to 3 I's)
+    $                   # end of string
+    """ ,re.VERBOSE)
+
+def fromRoman(s):
+    """convert Roman numeral to integer"""
+    if not s:
+        raise(InvalidRomanNumeralError, 'Input can not be blank')
+    if not romanNumeralPattern.search(s):
+        raise(InvalidRomanNumeralError, 'Invalid Roman numeral: %s' % s)
+
+    result = 0
+    index = 0
+    for numeral, integer in romanNumeralMap:
+        while s[index:index+len(numeral)] == numeral:
+            result += integer
+            index += len(numeral)
+    return result
+
 def load(f):
     for line in f.readlines():
         sys.stdout.write(line)
@@ -266,6 +436,9 @@ def display_help():
     print("  - help     : display this message")
     print("  - print    : print the current save of the todo")
     print("  - save     : save the todo to the file")
+    print("  - add      : add a new section")
+    print("  - remove   : remove an existing section")
+    print("  - toggle   : toggle the state of a task")
 
 
 def menu(filepath, project : Todo):
@@ -289,12 +462,36 @@ def menu(filepath, project : Todo):
         project.write(f)
         print("Project saved to file")
         return True
-    elif choice == 5:
+    elif choice == 5: #rename
         if len(choices[1]) != 3:
             print("Usage:")
             print("  rename section new_name")
         else:
             project.rename(choices[1][1], choices[1][2])
+        return True
+    elif choice == 6: # add
+        if len(choices[1]) != 3:
+            print("Usage:")
+            print("  add section new_name")
+        else:
+            project.add(choices[1][1], choices[1][2])
+        return True
+    elif choice == 7: # add
+        if len(choices[1]) != 2:
+            print("Usage:")
+            print("  remove section")
+        else:
+            project.remove(choices[1][1])
+        return True
+    elif choice == 8: # add
+        size=len(choices[1])
+        if size == 3:
+            project.toggle(choices[1][1], choices[1][2])
+        elif size == 2:
+            project.toggle(choices[1][1], None)
+        else:
+            print("Usage:")
+            print("  toggle section [True/False]")
         return True
     else:
         return True #Shall not happen
@@ -308,7 +505,8 @@ def menu_loop(filepath, project : Todo=None):
 
 def query_menu(question):
     valid = {"exit": 0, "quit" : 1, "help" : 2, "print" : 3, \
-            "save" : 4, "rename" : 5 }
+            "save" : 4, "rename" : 5, "add" : 6, "remove" : 7, \
+            "toggle" : 8 }
     prompt = " (help/exit): "
     while True:
         sys.stdout.write(question + prompt)
