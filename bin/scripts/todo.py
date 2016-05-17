@@ -128,7 +128,7 @@ class Todo:
                     k = k + 1
                 if "#" == oldline[0]:
                     # project name
-                    self.name=oldline[1:]
+                    self.name=oldline[1:-1]
                 oldline=line
 
         if not os.linesep == oldline:
@@ -334,6 +334,57 @@ class Todo:
                         t.name=newname
                         return
    
+    def export(self, filename):
+        if os.path.isfile(filename):
+            if not query_yes_no("File exist do you want to override it",\
+                    default="no"):
+                return
+        f = open(filename, "w+")
+        maxi=-1
+        for m in self.mainparts:
+            test = len(m.name) + 3
+            if maxi < test:
+                maxi=test
+            for s in m.subparts:
+                test = len(s.name) + 6
+                if maxi < test:
+                    maxi = test
+                for t in s.tasks:
+                    test = len(t.name) + 10
+                    if maxi < test:
+                        maxi = test
+        maxi = maxi + 5
+        f.write("TODO file for project: " + self.name + os.linesep)
+        f.write(os.linesep)
+        barwide(f, "START", maxi + 17)
+        f.write(os.linesep)
+
+        i = 0
+        for m in self.mainparts:
+            i = i + 1
+            roman=toRoman(i)
+            f.write((" # " + m.name).ljust(maxi) + "|----------| 100%" +\
+                    os.linesep)
+            j = 0
+            k = 0
+            for s in m.subparts:
+                j = j + 1
+                f.write(os.linesep)
+                f.write(("    * " + s.name).ljust(maxi) +\
+                        "|----------| 100%" + os.linesep)
+                f.write(os.linesep)
+                k = 0
+                for t in s.tasks:
+                    k = k + 1
+                    if t.done:
+                        f.write(("        - " + t.name).ljust(maxi) + \
+                                "|----------| 100%" + os.linesep)
+                    else:
+                        f.write(("        - " + t.name).ljust(maxi) + \
+                                "|          |   0%" + os.linesep)
+        f.write(os.linesep)
+        barwide(f, "END", maxi + 17)
+
     def print(self):
         i = 0
         maxi = -1
@@ -396,6 +447,14 @@ romanNumeralMap = (('M',  1000),
                    ('V',  5),
                    ('IV', 4),
                    ('I',  1))
+def barwide(f, text, size):
+    size = (size - (len(text) + 4) + 1) // 2
+    for i in range(0, size):
+        f.write("-")
+    f.write("| " + text + " |")
+    for i in range(0, size):
+        f.write("-")
+    f.write(os.linesep)
 
 def toRoman(n):
     """convert integer to Roman numeral"""
@@ -456,6 +515,7 @@ def display_help():
     print("  - add      : add a new section")
     print("  - remove   : remove an existing section")
     print("  - toggle   : toggle the state of a task")
+    print("  - export   : save on a more readable format")
 
 
 def menu(filepath, project : Todo):
@@ -510,6 +570,14 @@ def menu(filepath, project : Todo):
             print("Usage:")
             print("  toggle section [True/False]")
         return True
+    elif choice == 9: # add
+        size=len(choices[1])
+        if size == 2:
+            project.export(choices[1][1])
+        else:
+            print("Usage:")
+            print("  export FILE")
+        return True
     else:
         return True #Shall not happen
 
@@ -523,7 +591,7 @@ def menu_loop(filepath, project : Todo=None):
 def query_menu(question):
     valid = {"exit": 0, "quit" : 1, "help" : 2, "print" : 3, \
             "save" : 4, "rename" : 5, "add" : 6, "remove" : 7, \
-            "toggle" : 8 }
+            "toggle" : 8, "export" : 9 }
     prompt = " (help/exit): "
     while True:
         sys.stdout.write(question + prompt)
