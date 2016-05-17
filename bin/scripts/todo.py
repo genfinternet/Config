@@ -229,6 +229,14 @@ class Todo:
                 else:
                     print("Incorrect value enter false or true")
                     return
+        if state is None:
+            print("Section toggled")
+        else:
+            b = state.lower()
+            if b == "true" or b == "t":
+                print("Section marked as done")
+            elif b == "false" or b == "f":
+                print("Section marked as not done")
 
     def remove(self, section):
         i = 0
@@ -241,6 +249,7 @@ class Todo:
                return
             x=self.mainparts[index1]
             self.mainparts.remove(x)
+            print("Section removed")
         elif size == 2:
             index1=fromRoman(sections[0]) - 1
             index2=int(sections[1]) - 1
@@ -252,6 +261,7 @@ class Todo:
                return 
             x=self.mainparts[index1].subparts[index2]
             self.mainparts[index1].subparts.remove(x)
+            print("Section removed")
         elif size == 3:
             index1=fromRoman(sections[0]) - 1
             index2=int(sections[1]) - 1
@@ -267,6 +277,7 @@ class Todo:
                return 
             x=self.mainparts[index1].subparts[index2].tasks[index3]
             self.mainparts[index1].subparts[index2].tasks.remove(x)
+            print("Section removed")
 
     def add(self, section, newname):
         i = 0
@@ -311,6 +322,7 @@ class Todo:
                     self.mainparts[index1].subparts[size - 1].tasks.insert(index3, task)
                 else:
                     self.mainparts[index1].subparts[index2].tasks.insert(index3, task)
+        print("Section Added")
 
     def rename(self, section, newname):
         i = 0
@@ -319,6 +331,7 @@ class Todo:
             roman=toRoman(i)
             if roman == section:
                 m.name=newname
+                print("Section renamed")
                 return
             j = 0
             k = 0
@@ -326,20 +339,25 @@ class Todo:
                 j = j + 1
                 if roman + "." + str(j) == section:
                     s.name=newname
+                    print("Section renamed")
                     return
                 k = 0
                 for t in s.tasks:
                     k = k + 1
                     if roman + "." + str(j) + "." + str(k) == section:
                         t.name=newname
+                        print("Section renamed")
                         return
    
     def export(self, filename):
-        if os.path.isfile(filename):
+        if filename is None:
+            f = sys.stdout
+        elif os.path.isfile(filename):
             if not query_yes_no("File exist do you want to override it",\
                     default="no"):
                 return
-        f = open(filename, "w+")
+        else:
+            f = open(filename, "w+")
         maxi=-1
         for m in self.mainparts:
             test = len(m.name) + 3
@@ -535,9 +553,27 @@ def menu(filepath, project : Todo):
         project.print()
         return True
     elif choice == 4: #Save
-        f = open(filepath, "w+")
-        project.write(f)
-        print("Project saved to file")
+        size=len(choices[1])
+        if size == 1:
+            f = open(filepath, "w+")
+            project.write(f)
+            print("Project saved to file")
+        elif size == 2:
+            if (os.path.isfile(choices[1][1])):
+                if query_yes_no("File exists do you want to overwrite it",\
+                        default="no"):
+                    f = open(choices[1][1], "w+")
+                    project.write(f)
+                    print("Project saved to file")
+                else:
+                    print("Not saved")
+            else:
+                f = open(choices[1][1], "w+")
+                project.write(f)
+                print("Project saved to file")
+        else:
+            print("Usage:")
+            print("  save [ FILE ]")
         return True
     elif choice == 5: #rename
         if len(choices[1]) != 3:
@@ -572,7 +608,9 @@ def menu(filepath, project : Todo):
         return True
     elif choice == 9: # add
         size=len(choices[1])
-        if size == 2:
+        if size == 1:
+            project.export(None)
+        elif size == 2:
             project.export(choices[1][1])
         else:
             print("Usage:")
