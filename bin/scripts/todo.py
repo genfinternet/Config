@@ -40,6 +40,7 @@ class Tasks():
 class SubPart:
     name="SubPart"
     tasks = list()
+    percent=0
 
     def __init__(self, name="Subpart"):
         self.name = name
@@ -47,7 +48,7 @@ class SubPart:
         self.tasks.append(Tasks())
 
     def write(self, f):
-        f.write("* " + self.name + " **100%**" + os.linesep)
+        f.write("* " + self.name + " **" + str(self.percent).rjust(3) + "%**" + os.linesep)
         f.write(os.linesep)
         for t in self.tasks:
             t.write(f)
@@ -55,15 +56,16 @@ class SubPart:
 class MainPart:
     name="MainPart"
     subparts=list()
-    
+    percent=0
+
     def __init__(self, name="MainPart"):
         self.name = name
         self.subparts=list()
         self.subparts.append(SubPart())
 
     def write(self, f):
-        f.write(os.linesep + self.name + " **100%**" + os.linesep)
-        for i in range(0, len(self.name + " **100%**")):
+        f.write(os.linesep + self.name + " **" + str(self.percent).rjust(3) + "%**" + os.linesep)
+        for i in range(0, len(self.name) + 9):
             f.write("-")
         f.write(os.linesep)
         f.write(os.linesep)
@@ -73,11 +75,31 @@ class MainPart:
 class Todo:
     name="Project"
     mainparts=list()
-
+    
     def __init__(self, name="Project"):
         self.name = name
         self.mainparts=list()
         self.mainparts.append(MainPart())
+    
+    def check_percentage(self):
+        for m in self.mainparts:
+            nbsub=len(m.subparts) * 100
+            maintotal=0
+            for s in m.subparts:
+                nbtasks=len(s.tasks)
+                nbtasksdone=0
+                for t in s.tasks:
+                    if t.done:
+                        nbtasksdone = nbtasksdone + 1
+                if nbtasks == 0:
+                    s.percent = 100
+                else:
+                    s.percent = (100 * nbtasksdone) // nbtasks
+                maintotal = maintotal + s.percent
+            if nbsub == 0:
+                m.percent = 100
+            else:
+                m.percent = (maintotal * 100) // nbsub
 
     def load(self, lines):
         i = 1
@@ -157,6 +179,7 @@ class Todo:
 
 
     def write(self, f):
+        self.check_percentage()
         f.write("#" + self.name + os.linesep)
         for m in self.mainparts:
             m.write(f)
@@ -353,6 +376,7 @@ class Todo:
                         return
    
     def export(self, filename):
+        self.check_percentage()
         if filename is None:
             f = sys.stdout
         elif os.path.isfile(filename):
@@ -385,15 +409,16 @@ class Todo:
         for m in self.mainparts:
             i = i + 1
             roman=toRoman(i)
-            f.write((" # " + m.name).ljust(maxi) + "|----------| 100%" +\
-                    os.linesep)
+            f.write((" # " + m.name).ljust(maxi) + barpercent(m.percent) + \
+                    str(m.percent).rjust(4) + "%" + os.linesep)
             j = 0
             k = 0
             for s in m.subparts:
                 j = j + 1
                 f.write(os.linesep)
-                f.write(("    * " + s.name).ljust(maxi) +\
-                        "|----------| 100%" + os.linesep)
+                f.write(("    * " + s.name).ljust(maxi) + \
+                        barpercent(s.percent) + str(s.percent).rjust(4) + \
+                        "%" + os.linesep)
                 f.write(os.linesep)
                 k = 0
                 for t in s.tasks:
@@ -406,8 +431,9 @@ class Todo:
                                 "|          |   0%" + os.linesep)
         f.write(os.linesep)
         barwide(f, "END", maxi + 17)
-
+    
     def print(self):
+        self.check_percentage()
         i = 0
         maxi = -1
         maxibis = -1
@@ -416,7 +442,13 @@ class Todo:
             roman=toRoman(i)
             j = 0
             k = 0
+            test = len(roman)
+            if maxi < test:
+                maxi=test
             for s in m.subparts:
+                test = len("  " + roman + "." + str(j))
+                if maxi < test:
+                    maxi=test
                 j = j + 1
                 k = 0
                 for t in s.tasks:
@@ -469,6 +501,17 @@ romanNumeralMap = (('M',  1000),
                    ('V',  5),
                    ('IV', 4),
                    ('I',  1))
+
+def barpercent(percent):
+    s=""
+    s = s + "|"
+    for i in range(0, percent // 10):
+        s = s + "-"
+    for i in range(percent // 10, 10):
+        s = s + " "
+    s = s + "|"
+    return s
+
 def barwide(f, text, size):
     size = (size - (len(text) + 4) + 1) // 2
     for i in range(0, size):
