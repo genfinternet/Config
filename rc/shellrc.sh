@@ -197,7 +197,7 @@ alias CDP='cdp'
 # Let's start a flame war
 alias emacs='echo "You should really use vim instead"; sleep 1; vim'
 
-alias excuse="$CONFIG_GIT_DIR/scripts/excuse.sh"
+alias excuse="$CONFIG_GIT_DIR/bin/scripts/excuse.sh"
 
 ##############################
 #                            #
@@ -210,7 +210,7 @@ alias gcc='gcc -Werror -Wall -Wextra -pedantic -std=c99'
 # Just kidding
 unalias gcc
 # Now for real, color gcc output
-alias gcc="perl $CONFIG_GIT_OTHER/bin/scripts/colorgcc.perl"
+alias gcc="perl $CONFIG_OTHER_DIR/bin/scripts/colorgcc.perl"
 
 alias LINES='tput lines'
 alias COLS='tput cols'
@@ -232,7 +232,7 @@ alias wifi-menu="sudo wifi-menu"
 alias sql="$CONFIG_GIT_DIR/bin/scripts/postgres.sh"
 alias valgrind="$CONFIG_OTHER_DIR/bin/scripts/valgrind-color.sh"
 alias const="$CONFIG_GIT_DIR/bin/tools/getconstructor.sh"
-alias tpile=". $CONFIG_GIT_DIR/bin/scripts/compile_tiger.sh"
+alias tpile=". $CONFIG_OTHER_DIR/bin/scripts/compile_tiger.sh"
 
 # This script is used to get the next transport for me, you'll need to adapt it
 alias ratp="$CONFIG_GIT_DIR/bin/scripts/ratp.sh"
@@ -345,7 +345,7 @@ alias debug="change debug"
 function sedit()
 {
   if [ $# -eq 1 ]; then
-    alias $1 | grep -E "alias .*=('|\").*\.sh('|\")" >/dev/null 2>/dev/null
+    alias $1 | grep -E "alias .*=('|\").*\.(sh|py)('|\")" >/dev/null 2>/dev/null
     if [ $? -eq 0 ]; then
       file=`alias $1 | grep -o -E "(\"|').*(\"|')"`
       file=`echo $file | sed "s/\('\|\"\)//g" | sed "s/^\. //g" | sed "s@~@$HOME@g"`
@@ -406,7 +406,7 @@ cs()
 #                            #
 ##############################
 
-alias todo="$CONFIG_GIT_DIR/bin/scripts/todo.sh"
+alias todo="$CONFIG_GIT_DIR/bin/scripts/todo.py"
 
 # Makefile :
 alias nmk="cp $CONFIG_GIT_DIR/template/makefiles/Makefile Makefile"
@@ -476,15 +476,11 @@ alias gitpull='gpull'
 gpull()
 {
   if [ $# -eq 2 ]; then
-    if [ $1 = "origin" ]; then
       git checkout $2
       git pull $@
-    else
-      echo -e -n "\e[33m"
-      echo -n "I do not know how to switch in a branch not in origin yet,"
-      echo -n " can't switch to $1/$2 use \`git checkout' and \`git pull' instead"
-      echo -e "\e[0m"
-    fi
+  elif [ $# -eq 1 ]; then
+    git checkout master
+    git pull $1 master
   else
     git checkout master
     git pull origin master
@@ -503,7 +499,7 @@ gpush()
 
 alias mkrepo="$CONFIG_GIT_DIR/bin/scripts/mkrepo.sh"
 
-function changegituser()
+function swapauthorgit()
 {
   echo -e -n "\e[32;1mUsing this function is dangerous and will rewrite your"
   echo -e -n " entire commit history, do you wish to proceed (Y/n): \e[0m"
@@ -527,50 +523,6 @@ function changegituser()
       git filter-branch -f --env-filter "GIT_AUTHOR_NAME=$NEW_NAME; GIT_AUTHOR_EMAIL=$NEW_EMAIL; GIT_COMMITTER_NAME=$OLD_NAME; GIT_COMMITTER_EMAIL=$OLD_EMAIL;" HEAD
     fi
   fi
-}
-
-function swapgituser()
-{
-    NAME=""
-    EMAIL=""
-    while [ $# -ne 0 ]; do
-        case $1 in
-            -n)
-                shift
-                NAME="$1"
-                ;;
-            -m)
-                shift
-                EMAIL="$1"
-                ;;
-            -h)
-                echo >&2 -e -n "\e[33;1m"
-                echo "Help you changing your git user locally"
-                echo "Usage: swapgituser [-n NAME] [-m EMAIL]"
-                echo >&2 -e -n "\e[33;1m\e[0m"
-                ;;
-            --help)
-                ;;
-            *)
-                echo >&2 -e "\e[33;1mIgnored argument $1\e[0m"
-                ;;
-        esac
-        shift
-    done
-    while [ -z "$NAME" ]; do
-        echo -e -n "\e[34;1mWhat shall the name of the commiter be: \e[0m"
-        read -r NAME
-    done
-    while [ -z "$EMAIL" ]; do
-        echo -e -n "\e[34;1mWhat the email of the commiter be: \e[0m"
-        read -r EMAIL
-    done
-    echo -e "\e[34;1mChanging username to \`\e[36;1m$NAME\e[34;1m': \e[0m"
-    echo -e "\e[34;1mChanging email to \`\e[36;1m$EMAIL\e[34;1m': \e[0m"
-    git config user.name "$NAME"
-    git config user.email "$EMAIL"
-    echo -e -n "\e[34;1mIf you want to rewrite the history as well"
-    echo -e " you can call \`\e[36;1mchangegituser\e[34;1m': \e[0m"
 }
 
 ##############################

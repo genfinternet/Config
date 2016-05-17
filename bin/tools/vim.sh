@@ -107,7 +107,7 @@ function create_cc()
         echo " ** \brief Implementation of $class" >>$1
         echo " */" >>$1
         echo "" >>$1
-        echo "#include <$name.hh>" >>$1
+        echo "#include \"$name.hh\"" >>$1
         echo "" >>$1
         echo "$class::$class()" >>$1
         echo "{}" >>$1
@@ -161,7 +161,7 @@ function create_hh()
         echo "  protected:" >>$1
         echo "" >>$1
         echo "}" >>$1
-        echo "#include <$name.hxx>" >>$1
+        echo "#include \"$name.hxx\"" >>$1
     fi
 }
 
@@ -180,7 +180,7 @@ function create_hxx()
         echo " */" >>$1
         echo "" >>$1
         echo "#pragma once" >>$1
-        echo "#include <$name.hh>" >>$1
+        echo "#include \"$name.hh\"" >>$1
     fi
 }
 
