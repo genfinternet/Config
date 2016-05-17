@@ -356,6 +356,7 @@ class Todo:
             if not query_yes_no("File exist do you want to override it",\
                     default="no"):
                 return
+            f = open(filename, "w+")
         else:
             f = open(filename, "w+")
         maxi=-1
