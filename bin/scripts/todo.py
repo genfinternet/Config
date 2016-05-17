@@ -325,6 +325,9 @@ class Todo:
         print("Section Added")
 
     def rename(self, section, newname):
+        if newname is None:
+            self.name = section
+            return
         i = 0
         for m in self.mainparts:
             i = i + 1
@@ -425,7 +428,7 @@ class Todo:
                         maxibis = test
         maxi = maxi + 1
         maxibis = maxibis + 1
-        print(Color.T + "TODO file for project:", self.name[:-1] + Color.R)
+        print(Color.T + "TODO file for project:", self.name + Color.R)
         i = 0
         for m in self.mainparts:
             i = i + 1
@@ -577,11 +580,14 @@ def menu(filepath, project : Todo):
             print("  save [ FILE ]")
         return True
     elif choice == 5: #rename
-        if len(choices[1]) != 3:
+        size=len(choices[1])
+        if size == 3:
+            project.rename(choices[1][1], choices[1][2])
+        elif size == 2:
+            project.rename(choices[1][1], None)
+        else:
             print("Usage:")
             print("  rename section new_name")
-        else:
-            project.rename(choices[1][1], choices[1][2])
         return True
     elif choice == 6: # add
         if len(choices[1]) != 3:
