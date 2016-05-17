@@ -4,6 +4,7 @@ import argparse
 import os
 import sys
 import re
+
 parser = argparse.ArgumentParser(description='TODO Manager')
 parser.add_argument('-f', action="store", default="TODO.md", dest="f",
         help='Specify the todo file')
@@ -130,17 +131,25 @@ class Todo:
                     self.name=oldline[1:]
                 oldline=line
 
-        if not os.linesep == oldline or " " == oldline[0]:
-            task=Tasks()
-            task.name=oldline[10:-1]
-            if oldline[7] == "x":
-                task.done = True
-            else:
-                task.done = False
-            if not main is None:
-                if not sub is None:
-                    if not task is None:
-                        sub.tasks.append(task)
+        if not os.linesep == oldline:
+            if " " == oldline[0]:
+                task=Tasks()
+                task.name=oldline[10:-1]
+                if oldline[7] == "x":
+                    task.done = True
+                else:
+                    task.done = False
+                if not main is None:
+                    if not sub is None:
+                        if not task is None:
+                            sub.tasks.append(task)
+            if "*" == oldline[0]:
+                sub=SubPart()
+                sub.tasks=list()
+                sub.name=oldline[2:-10]
+                if not main is None:
+                    if not sub is None:
+                        main.subparts.append(sub)
         if not main is None:
             if not sub is None:
                 main.subparts.append(sub)
@@ -263,7 +272,7 @@ class Todo:
     def add(self, section, newname):
         i = 0
         sections = section.split(".")
-        size=len(sections)
+        size = len(sections)
         if size == 1:
             main = MainPart()
             main.subparts = list()
@@ -278,8 +287,10 @@ class Todo:
             index2=int(sections[1]) - 1
             size=len(self.mainparts) 
             if size <= index1:
-               index1 = size - 1
-            self.mainparts[index1].subparts.insert(index2, sub)
+               self.add(sections[0], newname)
+               self.mainparts[size].subparts.insert(index2, sub)
+            else:
+               self.mainparts[index1].subparts.insert(index2, sub)
         elif size == 3:
             task = Tasks()
             task.done = False
@@ -287,13 +298,20 @@ class Todo:
             index1=fromRoman(sections[0]) - 1
             index2=int(sections[1]) - 1
             index3=int(sections[2]) - 1
-            size=len(self.mainparts) 
+            size=len(self.mainparts)
             if size <= index1:
-               index1 = size - 1
-            size=len(self.mainparts[index1].subparts) 
-            if size <= index2:
-                index2 = size - 1
-            self.mainparts[index1].subparts[index2].tasks.insert(index3, task)
+                self.add(sections[0] + "." + sections[1], newname)
+                size=len(self.mainparts)
+                size2=len(self.mainparts[size - 1].subparts)
+                self.mainparts[size - 1].subparts[size2 - 1].tasks.insert(index3, task)
+            else:
+                size=len(self.mainparts[index1].subparts)
+                if size <= index2:
+                    self.add(sections[0] + "." + sections[1], newname)
+                    size=len(self.mainparts[index1].subparts)
+                    self.mainparts[index1].subparts[size - 1].tasks.insert(index3, task)
+                else:
+                    self.mainparts[index1].subparts[index2].tasks.insert(index3, task)
 
     def rename(self, section, newname):
         i = 0
