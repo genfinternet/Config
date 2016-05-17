@@ -62,8 +62,8 @@ class MainPart:
         self.subparts.append(SubPart())
 
     def write(self, f):
-        f.write(self.name + " **100%**" + os.linesep)
-        for i in range(0, len(self.name)):
+        f.write(os.linesep + self.name + " **100%**" + os.linesep)
+        for i in range(0, len(self.name + " **100%**")):
             f.write("-")
         f.write(os.linesep)
         f.write(os.linesep)
@@ -158,7 +158,6 @@ class Todo:
 
     def write(self, f):
         f.write("#" + self.name + os.linesep)
-        f.write(os.linesep)
         for m in self.mainparts:
             m.write(f)
 
