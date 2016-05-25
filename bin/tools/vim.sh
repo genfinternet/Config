@@ -98,6 +98,11 @@ function create_cc()
     exist_file $1
     if [ $? -eq 0 ]; then
         touch $1
+        if [ `dirname $1` = "." ]; then
+          namespace=$(basename $(pwd))
+        else
+          namespace=$(basename $(dirname $1))
+        fi
         a=`basename $1`
         a="${a%.*}"
         name=`echo $a | sed "s/\([a-z]\)/\l\1/g"`
@@ -109,10 +114,13 @@ function create_cc()
         echo "" >>$1
         echo "#include \"$name.hh\"" >>$1
         echo "" >>$1
-        echo "$class::$class()" >>$1
-        echo "{}" >>$1
-        echo "$class::~$class()" >>$1
-        echo "{}" >>$1
+        echo "namespace $namespace" >>$1
+        echo "{" >>$1
+        echo "  $class::$class()" >>$1
+        echo "  {}" >>$1
+        echo "  $class::~$class()" >>$1
+        echo "  {}" >>$1
+        echo "}" >>$1
     fi
 }
 
@@ -138,6 +146,11 @@ function create_hh()
     exist_file $1
     if [ $? -eq 0 ]; then
         touch $1
+        if [ `dirname $1` = "." ]; then
+          namespace=$(basename $(pwd))
+        else
+          namespace=$(basename $(dirname $1))
+        fi
         a=`basename $1`
         a="${a%.*}"
         name=`echo $a | sed "s/\([a-z]\)/\L\1/g"`
@@ -149,17 +162,20 @@ function create_hh()
         echo "" >>$1
         echo "#pragma once" >>$1
         echo "" >>$1
-        echo "#include <stdio>" >>$1
+        echo "#include <iostream>" >>$1
         echo "" >>$1
-        echo "class $class" >>$1
+        echo "namespace $namespace" >>$1
         echo "{" >>$1
-        echo "  public:" >>$1
-        echo "    $class();" >>$1
-        echo "    ~$class();" >>$1
-        echo "  private:" >>$1
+        echo "  class $class" >>$1
+        echo "  {" >>$1
+        echo "    public:" >>$1
+        echo "      $class();" >>$1
+        echo "      ~$class();" >>$1
+        echo "    private:" >>$1
         echo "" >>$1
-        echo "  protected:" >>$1
+        echo "    protected:" >>$1
         echo "" >>$1
+        echo "  }" >>$1
         echo "}" >>$1
         echo "#include \"$name.hxx\"" >>$1
     fi
@@ -170,6 +186,11 @@ function create_hxx()
     exist_file $1
     if [ $? -eq 0 ]; then
         touch $1
+        if [ `dirname $1` = "." ]; then
+          namespace=$(basename $(pwd))
+        else
+          namespace=$(basename $(dirname $1))
+        fi
         a=`basename $1`
         a="${a%.*}"
         name=`echo $a | sed "s/\([a-z]\)/\L\1/g"`
@@ -181,6 +202,11 @@ function create_hxx()
         echo "" >>$1
         echo "#pragma once" >>$1
         echo "#include \"$name.hh\"" >>$1
+        echo "" >>$1
+        echo "namespace $namespace" >>$1
+        echo "{" >>$1
+        echo "" >>$1
+        echo "}" >>$1
     fi
 }
 
