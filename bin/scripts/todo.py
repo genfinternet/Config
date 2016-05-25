@@ -48,7 +48,7 @@ class SubPart:
         self.tasks.append(Tasks())
 
     def write(self, f):
-        f.write("* " + self.name + " **" + str(self.percent).rjust(3) + "%**" + os.linesep)
+        f.write("* " + self.name + os.linesep)
         f.write(os.linesep)
         for t in self.tasks:
             t.write(f)
@@ -64,7 +64,7 @@ class MainPart:
         self.subparts.append(SubPart())
 
     def write(self, f):
-        f.write(os.linesep + self.name + " **" + str(self.percent).rjust(3) + "%**" + os.linesep)
+        f.write(os.linesep + self.name + os.linesep)
         for i in range(0, len(self.name) + 9):
             f.write("-")
         f.write(os.linesep)
@@ -120,7 +120,7 @@ class Todo:
                         self.mainparts.append(main)
                     main=MainPart()
                     main.subparts=list()
-                    main.name=oldline[:-10]
+                    main.name=oldline[:-1]
                     i = i + 1
                     j = 1
                     k = 1
@@ -131,7 +131,7 @@ class Todo:
                             main.subparts.append(sub)
                     sub=SubPart()
                     sub.tasks=list()
-                    sub.name=oldline[2:-10]
+                    sub.name=oldline[2:-1]
                     #new subpart
                     k = 0
                     j = j + 1 
