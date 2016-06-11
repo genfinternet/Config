@@ -341,7 +341,18 @@ alias ccb="change bdd"
 alias revert="change revert"
 alias verbose="change verbose"
 alias debug="change debug"
-
+function cpr()
+{
+  if [ $# -ne 2 ]; then
+    echo >&2 -e "\e[32;1m$0: Copy and rename files"
+    echo >&2 -e "\e[32;1mUsage: $0 [OLDNAME.] [NEWNAME.]"
+  fi
+  OLDNAME=`echo $1 | sed "s/\.$//g"`
+  NEWNAME=`echo $2 | sed "s/\.$//g"`
+  for i in $OLDNAME.*; do
+    cp $i `echo $i | sed "s/$OLDNAME/$NEWNAME/g"`
+  done
+}
 function sedit()
 {
   if [ $# -eq 1 ]; then

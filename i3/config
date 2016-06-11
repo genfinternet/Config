@@ -1,14 +1,10 @@
 set $mod Mod4
 font pango:monospace 8
 
-# Set wallpaper
 exec_always feh --bg-fill /home/genfinternet/Pictures/Wallpaper/mickey.png
-
-# Enfore default
 exec_always setxkbmap fr
 exec_always xset -b
 exec_always xset r rate 250 30
-
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
@@ -66,8 +62,8 @@ bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+i exec "i3-nagbar -t warning -m 'This will execute your logout script, do you really want to' -b 'Yes, proceed' 'sh /nfs/home/epita_2018/piriou_a/.my_bin/exit.sh'"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -108,9 +104,10 @@ bar {
 #############################                    ############################
 #############################################################################
 
-#Config
 bindsym $mod+Return exec xterm -bg grey7 -fg white
-bindsym $mod+BackSpace exec "xterm -e /home/genfinternet/Config/bin/scripts/dead_lock.sh"
+bindsym $mod+Shift+Return exec xterm -bg grey7 -fg white
+#bindsym $mod+BackSpace exec xterm -e 'sh /nfs/home/epita_2018/piriou_a/Config/bin/scripts/dead_lock.sh'
+bindsym $mod+BackSpace exec /home/genfinternet/.my_bin/epi3lock -i ~/Wallpaper/biblioteque.png;
 bindsym $mod+c exec google-chrome-stable
  
 #Workspace 1

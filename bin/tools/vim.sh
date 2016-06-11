@@ -175,7 +175,7 @@ function create_hh()
         echo "" >>$1
         echo "    protected:" >>$1
         echo "" >>$1
-        echo "  }" >>$1
+        echo "  };" >>$1
         echo "}" >>$1
         echo "#include \"$name.hxx\"" >>$1
     fi

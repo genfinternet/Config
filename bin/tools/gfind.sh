@@ -28,13 +28,13 @@ if [ $# -eq 1 ]; then
   done
 
   if [ "$list_dir" != "" ]; then
-    echo -e "\e[34;1mDirectories:\e[0m"
+    echo >&2 -e "\e[34;1mDirectories:\e[0m"
     for i in $list_dir; do
       echo $i | grep -E --color=auto "$1"
     done
   fi
   if [ "$list_files" != "" ]; then
-    echo -e "\e[34;1mFiles:\e[0m"
+    echo >&2 -e "\e[34;1mFiles:\e[0m"
     for i in $list_files; do
       echo $i | grep -E --color=auto "$1"
     done
