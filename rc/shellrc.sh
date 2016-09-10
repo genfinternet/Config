@@ -277,14 +277,19 @@ man() {
 #                            #
 ##############################
 
-# Dirty trick because I haven't configure it properly yet
-function resetadb()
-{
-  adb kill-server
-  sudo adb start-server
-  adb devices
-}
-
+blank () {
+    if [ $# -eq 1 ] && [ "$1" = "off" ] ; then
+      xset -dpms
+      echo "Screen timout disabled"
+    else
+      DUR="$(xset q | grep Standby | cut -d' ' -f4)"
+      xset s off
+      case $DUR in
+      7200) xset dpms 3 3 3;echo "Screen timout enabled and set to 30seconds";;
+      *) xset dpms 7200 7200 7200;echo "Screen timout enabled and set to 2 hours";;
+      esac
+    fi
+} 
 # A very weak (very very weak) password protection for some scripts
 # DO NOT USE FOR ANYTHING REMOTLY IMPORTANT
 # DO NOT USE YOUR ROOT PASSWORD FOR THIS
@@ -311,28 +316,9 @@ alias ccsprojekt='cl;ccs; ccs README TODO AUTHORS'
 # Those aliases commit all file matching an extention in subdirectory
 # Be carefull when you use it. 
 # I mean don't use it, it defeats the purpose of version control.
-alias javacommitall="fun_commitall java"
-alias commitall="fun_commitall"
-alias autocommit="fun_commitall $SUPPORTED_EXTENTIONS"
-function fun_commitall()
-{
-  if [ -f "./build.xml" ]; then
-    git add build.xml
-    git commit -m "Add build.xml"
-  fi
-  if [ -f "./Makefile" ]; then
-    git add Makefile
-    git commit -m "Add Makefile"
-  fi
-  for i in $@; do
-    for i in `find . | grep -E "\.$i\$"`; do
-      if [ -f $i ]; then
-        git add $i
-        git commit -m"Add `basename $i | sed -E "s/(.*)\.(.*)/\2 file : \1/g"`"
-      fi
-    done
-  done
-}
+alias commitall="commitall_"
+alias autocommit="commitall_ $SUPPORTED_EXTENTIONS"
+alias commitall_="$CONFIG_GIT_DIR/bin/scripts/commitall.sh"
 
 # Change script, very usefull, you should check it out
 alias change=". $CONFIG_GIT_DIR/bin/tools/change.sh"
