@@ -126,6 +126,14 @@ cdp()
   fi
 }
 
+function cdf()
+{
+  cd $CUSTOM_WORK_DIR
+  for i in $@; do
+    cd $i*
+  done
+}
+
 function cdd()
 {
   cd $CUSTOM_PROJECT_DIR
