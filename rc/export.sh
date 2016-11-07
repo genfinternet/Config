@@ -14,8 +14,12 @@ export CONFIG_OTHER_DIR="$HOME/Config/rsrc"
 
 # Directory for all your project. Can be accessed with the `cdp' alias
 export MAIN_PROJECT_DIR="$HOME/Project"
+
 # Directory for all your project. Can be accessed with the `cdd' alias
 export CUSTOM_PROJECT_DIR="$HOME/Perso"
+
+# Directory for all your work project. Can be accessed with the `cde' alias
+export CUSTOM_WORK_DIR="$HOME/Work"
 
 ##############################
 #                            #
@@ -31,7 +35,7 @@ export FLAG_VERBOSE="off"
 export SUPPORTED_EXTENTIONS="py sql ll yy sh hxx hh cc h c java"
 export PRIORITY_PICKS="hxx cc hh"
 
-export CURRENT_PROJECT="MYPHOTOSHOP"
+export CURRENT_PROJECT="YAKASTING"
 export TIGER_DIR="/tmp/tiger"
 export CURRENT_BDD="samedi_matin"
 
