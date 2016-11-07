@@ -469,31 +469,6 @@ alias branch='git branch'
 alias pushtags="submission"
 alias submission="$CONFIG_GIT_DIR/bin/tools/pushtags.sh"
 
-alias gitpull='gpull'
-gpull()
-{
-  if [ $# -eq 2 ]; then
-      git checkout $2
-      git pull $@
-  elif [ $# -eq 1 ]; then
-    git checkout master
-    git pull $1 master
-  else
-    git checkout master
-    git pull origin master
-  fi
-}
-
-alias gitpush='gpush'
-gpush()
-{
-  if [ "$#" = "0" ]; then
-    git push origin master;
-  else
-    git push $@;
-  fi
-}
-
 alias mkrepo="$CONFIG_GIT_DIR/bin/scripts/mkrepo.sh"
 
 function swapauthorgit()
