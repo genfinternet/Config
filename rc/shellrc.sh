@@ -468,7 +468,7 @@ alias branch='git branch'
 
 alias pushtags="submission"
 alias submission="$CONFIG_GIT_DIR/bin/tools/pushtags.sh"
-
+alias review="$CONFIG_GIT_DIR/bin/tools/review.sh"
 alias mkrepo="$CONFIG_GIT_DIR/bin/scripts/mkrepo.sh"
 
 function swapauthorgit()
