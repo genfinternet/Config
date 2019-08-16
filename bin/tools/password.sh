@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ $# -eq 1 ] && [ "$1" = "change" ]; then
     echo -e "\e[34;1mEnter current password\e[0m"

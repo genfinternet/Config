@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #TODO prompt to force if tag already exists
 

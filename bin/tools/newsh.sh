@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 exist_file()
 {
     if [ -e $1 ]; then

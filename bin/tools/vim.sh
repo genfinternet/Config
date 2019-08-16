@@ -1,6 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 
-function exist_file()
+shopt -s xpg_echo
+
+exist_file ()
 {
     if [ -e $1 ]; then
         return 1
@@ -9,7 +11,7 @@ function exist_file()
     fi
 }
 
-function create_c()
+create_c ()
 {
     exist_file $1
     if [ $? -eq 0 ]; then
@@ -30,7 +32,7 @@ function create_c()
     fi
 }
 
-function create_h()
+create_h ()
 {
     exist_file $1
     if [ $? -eq 0 ]; then
@@ -44,7 +46,7 @@ function create_h()
     fi  
 }
 
-function create_java()
+create_java ()
 {
     exist_file $1
     if [ $? -eq 0 ]; then
@@ -67,7 +69,7 @@ function create_java()
     fi
 }
 
-function create_html()
+create_html ()
 {
     exist_file $1
     if [ $? -eq 0 ]; then
@@ -93,7 +95,7 @@ function create_html()
     echo >>$1 "</html>"
 }
 
-function create_cc()
+create_cc ()
 {
     exist_file $1
     if [ $? -eq 0 ]; then
@@ -124,7 +126,7 @@ function create_cc()
     fi
 }
 
-function create_sql()
+create_sql ()
 {
     exist_file $1
     if [ $? -eq 0 ]; then
@@ -141,7 +143,7 @@ function create_sql()
     fi  
 }
 
-function create_hh()
+create_hh ()
 {
     exist_file $1
     if [ $? -eq 0 ]; then
@@ -181,7 +183,7 @@ function create_hh()
     fi
 }
 
-function create_hxx()
+create_hxx ()
 {
     exist_file $1
     if [ $? -eq 0 ]; then
@@ -210,7 +212,7 @@ function create_hxx()
     fi
 }
 
-function create_tig()
+create_tig ()
 {
     exist_file $1
     if [ $? -eq 0 ]; then
@@ -219,7 +221,7 @@ function create_tig()
     fi  
 }
 
-function create_py()
+create_py ()
 {
     exist_file $1
     if [ $? -eq 0 ]; then
@@ -229,7 +231,7 @@ function create_py()
     fi
 }
 
-function create_tih()
+create_tih ()
 {
     exist_file $1
     if [ $? -eq 0 ]; then
@@ -237,7 +239,7 @@ function create_tih()
         echo -e "/* file $1 */\n\n">>$1
     fi  
 }
-function create_sh()
+create_sh ()
 {
     exist_file $1
     if [ $? -eq 0 ]; then
@@ -247,7 +249,7 @@ function create_sh()
     fi  
 }
 
-function verbose()
+verbose ()
 {
     if [ "$FLAG_VERBOSE" = "on" ]; then
         if [ $1 = "creation" ]; then
@@ -278,7 +280,7 @@ create_file()
     verbose "creation" $@
 }
 
-function get_list_doc()
+get_list_doc ()
 {
     list_to_open=""
     for i in $@; do

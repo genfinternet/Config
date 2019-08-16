@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if ! git ls-files 2>/dev/null >/dev/null; then
   echo >&2 -e "\e[33;1mThis is not a git directory, aborting...\e[0m"

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 
 alias RESET='echo -e -n "\e[0m"'

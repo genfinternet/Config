@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ $# -gt 0 ]; then
     CURRENT_BDD=$1

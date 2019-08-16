@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 list_file=""
 if [ $# -eq 1 ]; then
